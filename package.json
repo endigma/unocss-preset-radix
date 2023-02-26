@@ -8,6 +8,13 @@
     "release": "pnpm build && pnpm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endigma/unocss-preset-radix.git"
+  },
+  "bugs": {
+    "url": "https://github.com/endigma/unocss-preset-radix/issues"
+  },
   "keywords": [
     "unocss",
     "radix"
