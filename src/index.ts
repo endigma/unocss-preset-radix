@@ -32,7 +32,7 @@ function minify(css: string) {
   return css.replace(/\n/g, "").replace(/\s+/g, "").trim();
 }
 
-export const presetRadix = (options: PresetRadixOptions): Preset => {
+export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T> => {
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
@@ -45,7 +45,7 @@ export const presetRadix = (options: PresetRadixOptions): Preset => {
   const hues = generateHues(prefix);
   const aliases = generateAliases(colors, selectedAliases);
 
-  const preset: Preset = {
+  const preset: Preset<T> = {
     name: "unocss-preset-radix",
     layers: {
       radix: 0,
@@ -76,12 +76,12 @@ export const presetRadix = (options: PresetRadixOptions): Preset => {
         },
       ],
     ],
-    theme: {
-      colors: {
+    extendTheme(theme: { [key: string]: any }) {
+      theme.colors = {
         ...colors,
         ...hues,
         ...aliases,
-      },
+      };
     },
     preflights: [
       {
