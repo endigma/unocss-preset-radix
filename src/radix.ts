@@ -24,9 +24,10 @@ function getScale(name: string): Scale {
   const rawScale = radix[name as RadixScales] as { [key: string]: string };
 
   const keyValues = Object.keys(rawScale).map((key) => {
-    return { [parseInt(key.match(/.*?(\d+)/)![1])]: rawScale[key] };
+    return [parseInt(key.match(/.*?(\d+)/)![1]), rawScale[key]];
   });
-  return Object.assign({}, ...keyValues);
+
+  return Object.fromEntries(keyValues);
 }
 
 export function getColor(name: RadixColors): Color {
@@ -53,10 +54,7 @@ export function generateColors(palette: Palette, prefix: string) {
 }
 
 export function generateHues(prefix: string) {
-  const hue = Array.from({ length: 12 }, (_, i) => {
-    return { [i]: `var(${prefix}hue${i})` };
-  }).reduce((r, c) => Object.assign(r, c));
-
+  const hue = Array.from({ length: 12 }, (_, i) => `var(${prefix}hue${i})`);
   return { hue };
 }
 
