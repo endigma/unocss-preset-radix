@@ -1,6 +1,8 @@
 import { genCSS, generateColors, generateHues, newPalette, type RadixColors } from "./radix";
 import type { Preset } from "@unocss/core";
 
+export { RadixColors };
+
 export type ColorAlias = [alias: string, target: string];
 
 export interface PresetRadixOptions {
