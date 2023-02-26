@@ -1,71 +1,95 @@
-import * as radix from "@radix-ui/colors";
+import { genCSS, generateColors, generateHues, newPalette, type RadixColors } from "./radix";
+import type { Preset } from "@unocss/core";
 
-export type RadixScales = Exclude<keyof typeof radix, "__esModule" | "default">;
-export type RadixColors = Exclude<
-  RadixScales,
-  `${RadixScales}Dark` | `${RadixScales}DarkA` | `${RadixScales}A` | "whiteA" | "blackA"
->;
+export type ColorAliases = { [key: string]: RadixColors };
 
-type StepIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-type Scale = {
-  readonly [key in StepIndex]: string;
-};
+export interface PresetRadixOptions {
+  palette: RadixColors[];
+  /**
+   * The prefix of the generated css variables
+   * @default --un-preset-radix
+   */
+  prefix?: string;
 
-type Palette = [string, Color][];
+  /**
+   * Customize the selector used to apply the dark versions of the color palette
+   * @default ".dark-theme"
+   */
+  darkSelector?: string;
 
-type Color = {
-  light: Scale;
-  lightAlpha: Scale;
-  dark: Scale;
-  darkAlpha: Scale;
-};
-
-function getScale(name: string): Scale {
-  const rawScale = radix[name as RadixScales] as { [key: string]: string };
-
-  const keyValues = Object.keys(rawScale).map((key) => {
-    return { [parseInt(key.match(/.*?(\d+)/)![1])]: rawScale[key] };
-  });
-  return Object.assign({}, ...keyValues);
+  /** Add color aliases */
+  aliases?: ColorAliases;
 }
 
-export function getColor(name: RadixColors): Color {
-  return {
-    light: getScale(name),
-    lightAlpha: getScale(name + "A"),
-    dark: getScale(name + "Dark"),
-    darkAlpha: getScale(name + "DarkA"),
+export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
+  return Object.entries(aliases).reduce((o, [alias, target]) => {
+    o[alias] = colors[target];
+    return o;
+  }, {} as { [key: string]: { [key: number]: string } });
+}
+
+function minify(css: string) {
+  return css.replace(/\n/g, "").replace(/\s+/g, "").trim();
+}
+
+export const presetRadix = (options: PresetRadixOptions): Preset => {
+  const {
+    prefix = "--un-preset-radix-",
+    darkSelector = ".dark-theme",
+    palette: selectedColors,
+    aliases: selectedAliases = {},
+  } = options;
+
+  const palette = newPalette(...selectedColors);
+  const colors = generateColors(palette, prefix);
+  const hues = generateHues(prefix);
+  const aliases = generateAliases(colors, selectedAliases);
+
+  const preset: Preset = {
+    name: "unocss-preset-radix",
+    layers: {
+      radix: 0,
+      default: 1,
+    },
+    rules: [
+      [
+        /^hue-(.+)$/,
+        ([, color], e) => {
+          if (selectedColors.includes(color as RadixColors)) {
+            return minify(`
+            .hue-${color} {
+              ${prefix}hue1: var(${prefix}${color}1);
+              ${prefix}hue2: var(${prefix}${color}2);
+              ${prefix}hue3: var(${prefix}${color}3);
+              ${prefix}hue4: var(${prefix}${color}4);
+              ${prefix}hue5: var(${prefix}${color}5);
+              ${prefix}hue6: var(${prefix}${color}6);
+              ${prefix}hue7: var(${prefix}${color}7);
+              ${prefix}hue8: var(${prefix}${color}8);
+              ${prefix}hue9: var(${prefix}${color}9);
+              ${prefix}hue10: var(${prefix}${color}10);
+              ${prefix}hue11: var(${prefix}${color}11);
+              ${prefix}hue12: var(${prefix}${color}12);
+            }
+          `);
+          }
+        },
+      ],
+    ],
+    theme: {
+      colors: {
+        ...colors,
+        ...hues,
+        ...aliases,
+      },
+    },
+    preflights: [
+      {
+        layer: "radix",
+        getCSS: () => genCSS(palette, darkSelector, prefix),
+      },
+    ],
   };
-}
 
-export function getColors(...names: RadixColors[]): Palette {
-  return names.map((n) => [n, getColor(n)]);
-}
-
-export function genCSS(palette: Palette, darkSelector = ".dark-theme"): string {
-  const css: string[] = [];
-
-  css.push(":root {");
-  for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.light)) {
-      css.push(`--${label}${shade}:${value};`);
-    }
-    for (const [shade, value] of Object.entries(color.lightAlpha)) {
-      css.push(`--${label}${shade}A:${value};`);
-    }
-  }
-  css.push("}");
-
-  css.push(`${darkSelector} {`);
-  for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.dark)) {
-      css.push(`--${label}${shade}:${value};`);
-    }
-    for (const [shade, value] of Object.entries(color.darkAlpha)) {
-      css.push(`--${label}${shade}:${value};`);
-    }
-  }
-  css.push("}");
-
-  return css.join("\n");
-}
+  return preset;
+};
