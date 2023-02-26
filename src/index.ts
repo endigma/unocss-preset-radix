@@ -1,7 +1,7 @@
 import { genCSS, generateColors, generateHues, newPalette, type RadixColors } from "./radix";
 import type { Preset } from "@unocss/core";
 
-export type ColorAliases = { [key: string]: RadixColors };
+export type ColorAlias = [alias: string, target: string];
 
 export interface PresetRadixOptions {
   palette: RadixColors[];
@@ -18,11 +18,11 @@ export interface PresetRadixOptions {
   darkSelector?: string;
 
   /** Add color aliases */
-  aliases?: ColorAliases;
+  aliases?: ColorAlias[];
 }
 
-export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
-  return Object.entries(aliases).reduce((o, [alias, target]) => {
+export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAlias[]) {
+  return aliases.reduce((o, [alias, target]) => {
     o[alias] = colors[target];
     return o;
   }, {} as { [key: string]: { [key: number]: string } });
@@ -37,7 +37,7 @@ export const presetRadix = (options: PresetRadixOptions): Preset => {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
     palette: selectedColors,
-    aliases: selectedAliases = {},
+    aliases: selectedAliases = [],
   } = options;
 
   const palette = newPalette(...selectedColors);
