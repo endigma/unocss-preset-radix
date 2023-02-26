@@ -1,0 +1,37 @@
+{
+  "name": "unocss-preset-radix",
+  "version": "0.1.0",
+  "author": "endigma <endigma@mailcat.ca>",
+  "description": "A preset for UnoCSS providing access to the Radix UI color palette, along with some helpers for using it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "unocss",
+    "radix"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@radix-ui/colors": "^0.1.8",
+    "@unocss/core": "^0.50.1"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "unbuild": "^1.1.2"
+  }
+}
