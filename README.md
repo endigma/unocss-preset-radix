@@ -42,7 +42,7 @@ The selector used for dark mode palette. Default is `.dark-theme`.
 
 ### aliases
 
-An array of tuples in the format `[alias, target]` that allows you to set aliases for the color palette. This does _not_ work with `hue` at the moment. (Feel free to contribute this, it's just a technicality with how `hue` works)
+A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases.
 
 ## `hue`
 
