@@ -3,7 +3,7 @@ import type { Preset } from "@unocss/core";
 
 export { RadixColors };
 
-export type ColorAlias = [alias: string, target: string];
+export type ColorAliases = { [key: string]: RadixColors };
 
 export interface PresetRadixOptions {
   palette: RadixColors[];
@@ -20,11 +20,11 @@ export interface PresetRadixOptions {
   darkSelector?: string;
 
   /** Add color aliases */
-  aliases?: ColorAlias[];
+  aliases?: ColorAliases;
 }
 
-export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAlias[]) {
-  return aliases.reduce((o, [alias, target]) => {
+export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
+  return Object.entries(aliases).reduce((o, [alias, target]) => {
     o[alias] = colors[target];
     return o;
   }, {} as { [key: string]: { [key: number]: string } });
@@ -39,7 +39,7 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
     palette: selectedColors,
-    aliases: selectedAliases = [],
+    aliases: selectedAliases = {},
   } = options;
 
   const palette = newPalette(...selectedColors);
@@ -56,25 +56,34 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
     rules: [
       [
         /^hue-(.+)$/,
-        ([, color], e) => {
+        ([, color]) => {
+          let target: string = "";
           if (selectedColors.includes(color as RadixColors)) {
+            target = color;
+          } else if (color in selectedAliases) {
+            target = selectedAliases[color];
+          }
+
+          if (target) {
             return minify(`
             .hue-${color} {
-              ${prefix}hue1: var(${prefix}${color}1);
-              ${prefix}hue2: var(${prefix}${color}2);
-              ${prefix}hue3: var(${prefix}${color}3);
-              ${prefix}hue4: var(${prefix}${color}4);
-              ${prefix}hue5: var(${prefix}${color}5);
-              ${prefix}hue6: var(${prefix}${color}6);
-              ${prefix}hue7: var(${prefix}${color}7);
-              ${prefix}hue8: var(${prefix}${color}8);
-              ${prefix}hue9: var(${prefix}${color}9);
-              ${prefix}hue10: var(${prefix}${color}10);
-              ${prefix}hue11: var(${prefix}${color}11);
-              ${prefix}hue12: var(${prefix}${color}12);
+              ${prefix}hue1: var(${prefix}${target}1);
+              ${prefix}hue2: var(${prefix}${target}2);
+              ${prefix}hue3: var(${prefix}${target}3);
+              ${prefix}hue4: var(${prefix}${target}4);
+              ${prefix}hue5: var(${prefix}${target}5);
+              ${prefix}hue6: var(${prefix}${target}6);
+              ${prefix}hue7: var(${prefix}${target}7);
+              ${prefix}hue8: var(${prefix}${target}8);
+              ${prefix}hue9: var(${prefix}${target}9);
+              ${prefix}hue10: var(${prefix}${target}10);
+              ${prefix}hue11: var(${prefix}${target}11);
+              ${prefix}hue12: var(${prefix}${target}12);
             }
           `);
           }
+
+          return "";
         },
       ],
     ],
