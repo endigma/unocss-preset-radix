@@ -81,8 +81,14 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
     extendTheme(theme: { [key: string]: any }) {
       theme.colors = {
         ...colors,
-        ...hues,
         ...aliases,
+        ...hues,
+
+        white: "#ffffff",
+        black: "#000000",
+        transparent: "transparent",
+        current: "currentColor",
+        inherit: "inherit",
       };
     },
     preflights: [
