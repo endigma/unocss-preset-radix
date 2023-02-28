@@ -74,6 +74,24 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
               ${prefix}hue12: var(${prefix}${color}12);
             }
           `);
+          } else {
+            let target = selectedAliases.find(([alias, target]) => alias === color)![1];
+            return minify(`
+            .hue-${color} {
+              ${prefix}hue1: var(${prefix}${target}1);
+              ${prefix}hue2: var(${prefix}${target}2);
+              ${prefix}hue3: var(${prefix}${target}3);
+              ${prefix}hue4: var(${prefix}${target}4);
+              ${prefix}hue5: var(${prefix}${target}5);
+              ${prefix}hue6: var(${prefix}${target}6);
+              ${prefix}hue7: var(${prefix}${target}7);
+              ${prefix}hue8: var(${prefix}${target}8);
+              ${prefix}hue9: var(${prefix}${target}9);
+              ${prefix}hue10: var(${prefix}${target}10);
+              ${prefix}hue11: var(${prefix}${target}11);
+              ${prefix}hue12: var(${prefix}${target}12);
+            }
+          `);
           }
         },
       ],
@@ -83,6 +101,12 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
         ...colors,
         ...hues,
         ...aliases,
+
+        white: "#ffffff",
+        black: "#000000",
+        transparent: "transparent",
+        current: "currentColor",
+        inherit: "inherit",
       };
     },
     preflights: [
