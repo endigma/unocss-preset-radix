@@ -17,10 +17,10 @@ export default defineConfig({
     presetUno(),
     presetRadix({
       palette: ["blue", "green", "red"],
-      aliases: [
-        ["primary", "green"],
-        ["info", "blue"],
-      ],
+      aliases: {
+				primary: 'green',
+				base: 'slate'
+			}
     }),
   ],
 });
