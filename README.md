@@ -18,9 +18,9 @@ export default defineConfig({
     presetRadix({
       palette: ["blue", "green", "red"],
       aliases: {
-				primary: 'green',
-				base: 'slate'
-			}
+	primary: 'green',
+	base: 'slate'
+      }
     }),
   ],
 });
