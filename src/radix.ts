@@ -62,10 +62,15 @@ export function newPalette(...names: RadixColors[]): Palette {
   return names.map((n) => [n, getColor(n)]);
 }
 
-export function genCSS(palette: Palette, darkSelector: string, prefix: string): string {
+export function genCSS(
+  palette: Palette,
+  darkSelector: string,
+  lightSelector: string,
+  prefix: string
+): string {
   const css: string[] = [];
 
-  css.push(":root {");
+  css.push(`${lightSelector} {`);
   for (const [label, color] of palette) {
     for (const [shade, value] of Object.entries(color.light)) {
       css.push(`${prefix}${label}${shade}:${value};`);

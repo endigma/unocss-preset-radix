@@ -19,6 +19,12 @@ export interface PresetRadixOptions {
    */
   darkSelector?: string;
 
+  /**
+   * Customize the selector used to apply the light versions of the color palette
+   * @default ":root, .light-theme"
+   */
+  lightSelector?: string;
+
   /** Add color aliases */
   aliases?: ColorAliases;
 }
@@ -38,6 +44,7 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
+    lightSelector = ":root, .light-theme",
     palette: selectedColors,
     aliases: selectedAliases = {},
   } = options;
@@ -103,7 +110,7 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
     preflights: [
       {
         layer: "radix",
-        getCSS: () => genCSS(palette, darkSelector, prefix),
+        getCSS: () => genCSS(palette, darkSelector, lightSelector, prefix),
       },
     ],
   };
