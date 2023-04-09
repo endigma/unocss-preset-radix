@@ -6,12 +6,15 @@ import dts from "vite-plugin-dts";
 
 export default defineConfig(({ mode }) => ({
   build: {
-    lib: {
-      entry: "./src/index.ts",
-      name: "unocss-preset-radix",
-      fileName: "index",
-      formats: ["es", "cjs"],
-    },
+    lib:
+      mode === "demo"
+        ? false
+        : {
+            entry: "./src/index.ts",
+            name: "unocss-preset-radix",
+            fileName: "index",
+            formats: ["es", "cjs"],
+          },
     rollupOptions: {
       external: ["unocss"],
     },

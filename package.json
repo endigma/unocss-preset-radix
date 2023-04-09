@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:demo": "vite build --mode demo",
     "test": "vitest",
     "test:update": "vitest -u",
     "release": "bumpp"
