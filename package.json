@@ -35,6 +35,7 @@
   ],
   "devDependencies": {
     "alpinejs": "^3.12.0",
+    "bumpp": "^9.1.0",
     "petite-vue": "^0.4.1",
     "typescript": "^5.0.4",
     "unocss": "^0.51.2",
