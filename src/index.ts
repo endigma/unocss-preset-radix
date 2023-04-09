@@ -17,7 +17,7 @@ export interface PresetRadixOptions {
    * Customize the selector used to apply the dark versions of the color palette
    * @default ".dark-theme"
    */
-  darkSelector?: string;
+  darkSelector?: string | boolean;
 
   /**
    * Customize the selector used to apply the light versions of the color palette

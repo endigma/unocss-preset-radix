@@ -3,7 +3,7 @@ import * as radix from "@radix-ui/colors";
 export type RadixScales = Exclude<keyof typeof radix, "__esModule" | "default">;
 export type RadixColors = Exclude<
   RadixScales,
-  `${RadixScales}Dark` | `${RadixScales}DarkA` | `${RadixScales}A` | "whiteA" | "blackA"
+  `${RadixScales}Dark` | `${RadixScales}DarkA`
 >;
 
 type StepIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
@@ -15,9 +15,7 @@ type Palette = [string, Color][];
 
 type Color = {
   light: Scale;
-  lightAlpha: Scale;
-  dark: Scale;
-  darkAlpha: Scale;
+  dark: Scale | null;
 };
 
 function getScale(name: string): Scale {
@@ -33,10 +31,8 @@ function getScale(name: string): Scale {
 export function getColor(name: RadixColors): Color {
   return {
     light: getScale(name),
-    lightAlpha: getScale(name + "A"),
-    dark: getScale(name + "Dark"),
-    darkAlpha: getScale(name + "DarkA"),
-  };
+    dark: ['whiteA', 'blackA'].includes(name) ? null : getScale(name.endsWith('A') ? name.slice(0, -1) + 'DarkA' : name + 'Dark')
+  }
 }
 
 export function generateColors(palette: Palette, prefix: string) {
@@ -64,7 +60,7 @@ export function newPalette(...names: RadixColors[]): Palette {
 
 export function genCSS(
   palette: Palette,
-  darkSelector: string,
+  darkSelector: string | boolean,
   lightSelector: string,
   prefix: string
 ): string {
@@ -75,22 +71,21 @@ export function genCSS(
     for (const [shade, value] of Object.entries(color.light)) {
       css.push(`${prefix}${label}${shade}:${value};`);
     }
-    // for (const [shade, value] of Object.entries(color.lightAlpha)) {
-    //   css.push(`${prefix}${label}${shade}A:${value};`);
-    // }
   }
   css.push("}\n");
 
-  css.push(`${darkSelector} {`);
-  for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.dark)) {
-      css.push(`${prefix}${label}${shade}:${value};`);
+  if (darkSelector) {
+    css.push(`${darkSelector} {`);
+    for (const [label, color] of palette) {
+      // whiteA / blackA has not dark mode
+      if (color.dark !== null) {
+        for (const [shade, value] of Object.entries(color.dark)) {
+          css.push(`${prefix}${label}${shade}:${value};`);
+        }
+      }
     }
-    // for (const [shade, value] of Object.entries(color.darkAlpha)) {
-    //   css.push(`${prefix}${label}${shade}:${value};`);
-    // }
+    css.push("}");
   }
-  css.push("}");
 
   return css.join("");
 }
