@@ -1,12 +1,13 @@
-import { genCSS, generateColors, generateHues, newPalette, type RadixColors } from "./radix";
+import { genCSS, generateColors, generateHues, newPalette } from "./utils";
+import type { RadixColors } from "./radix";
 import type { Preset } from "@unocss/core";
 
-export { RadixColors };
+export * from "./radix";
 
 export type ColorAliases = { [key: string]: RadixColors };
 
 export interface PresetRadixOptions {
-  palette: RadixColors[];
+  palette: readonly RadixColors[];
   /**
    * The prefix of the generated css variables
    * @default --un-preset-radix
@@ -40,7 +41,7 @@ function minify(css: string) {
   return css.replace(/\n/g, "").replace(/\s+/g, "").trim();
 }
 
-export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T> => {
+export function presetRadix(options: PresetRadixOptions): Preset {
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
@@ -54,11 +55,10 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
   const hues = generateHues(prefix);
   const aliases = generateAliases(colors, selectedAliases);
 
-  const preset: Preset<T> = {
+  return {
     name: "unocss-preset-radix",
     layers: {
-      radix: 0,
-      default: 1,
+      radix: -1,
     },
     rules: [
       [
@@ -73,21 +73,21 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
 
           if (target) {
             return minify(`
-            .hue-${color} {
-              ${prefix}hue1: var(${prefix}${target}1);
-              ${prefix}hue2: var(${prefix}${target}2);
-              ${prefix}hue3: var(${prefix}${target}3);
-              ${prefix}hue4: var(${prefix}${target}4);
-              ${prefix}hue5: var(${prefix}${target}5);
-              ${prefix}hue6: var(${prefix}${target}6);
-              ${prefix}hue7: var(${prefix}${target}7);
-              ${prefix}hue8: var(${prefix}${target}8);
-              ${prefix}hue9: var(${prefix}${target}9);
-              ${prefix}hue10: var(${prefix}${target}10);
-              ${prefix}hue11: var(${prefix}${target}11);
-              ${prefix}hue12: var(${prefix}${target}12);
-            }
-          `);
+              .hue-${color} {
+                ${prefix}hue1: var(${prefix}${target}1);
+                ${prefix}hue2: var(${prefix}${target}2);
+                ${prefix}hue3: var(${prefix}${target}3);
+                ${prefix}hue4: var(${prefix}${target}4);
+                ${prefix}hue5: var(${prefix}${target}5);
+                ${prefix}hue6: var(${prefix}${target}6);
+                ${prefix}hue7: var(${prefix}${target}7);
+                ${prefix}hue8: var(${prefix}${target}8);
+                ${prefix}hue9: var(${prefix}${target}9);
+                ${prefix}hue10: var(${prefix}${target}10);
+                ${prefix}hue11: var(${prefix}${target}11);
+                ${prefix}hue12: var(${prefix}${target}12);
+              }
+            `);
           }
 
           return "";
@@ -114,6 +114,4 @@ export const presetRadix = <T extends {}>(options: PresetRadixOptions): Preset<T
       },
     ],
   };
-
-  return preset;
-};
+}

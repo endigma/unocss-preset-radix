@@ -4,9 +4,11 @@
   "author": "endigma <endigma@mailcat.ca>",
   "description": "A preset for UnoCSS providing access to the Radix UI color palette, along with some helpers for using it.",
   "scripts": {
-    "build": "unbuild",
-    "release": "pnpm build && pnpm publish",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite dev",
+    "build": "vite build",
+    "test": "vitest",
+    "test:update": "vitest -u",
+    "release": "bumpp"
   },
   "repository": {
     "type": "git",
@@ -22,25 +24,22 @@
   "license": "MIT",
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
-    "@unocss/core": "^0.50.1"
+    "@unocss/core": "^0.51.2"
   },
   "sideEffects": false,
-  "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    }
-  },
+  "exports": "./dist/index.js",
   "files": [
     "dist"
   ],
   "devDependencies": {
-    "@changesets/cli": "^2.26.0",
-    "typescript": "^4.9.5",
-    "unbuild": "^1.1.2"
+    "alpinejs": "^3.12.0",
+    "petite-vue": "^0.4.1",
+    "typescript": "^5.0.4",
+    "unocss": "^0.51.2",
+    "vite": "^4.2.1",
+    "vite-plugin-dts": "^2.2.0",
+    "vitest": "^0.30.0"
   }
 }

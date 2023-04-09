@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "target": "es2018",
-    "module": "esnext",
-    "lib": ["esnext"],
+    "target": "es2020",
+    "module": "es2020",
+    "allowJs": true,
+    "checkJs": true,
     "moduleResolution": "node",
+    "importsNotUsedAsValues": "error",
     "esModuleInterop": true,
     "strict": true,
-    "strictNullChecks": true,
     "resolveJsonModule": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "jsx": "preserve"
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
+    "paths": {
+      "unocss-preset-radix": ["./src"]
+    }
   },
-  "exclude": ["**/dist/**", "**/node_modules/**"]
+  "include": ["./src/**/*.ts", "./tests/**/*"],
+  "exclude": ["**/node_modules/**"]
 }

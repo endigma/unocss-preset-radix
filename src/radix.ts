@@ -1,96 +1,155 @@
-import * as radix from "@radix-ui/colors";
+export const radixScales = [
+  "amber",
+  "amberA",
+  "amberDark",
+  "amberDarkA",
+  "blackA",
+  "blue",
+  "blueA",
+  "blueDark",
+  "blueDarkA",
+  "bronze",
+  "bronzeA",
+  "bronzeDark",
+  "bronzeDarkA",
+  "brown",
+  "brownA",
+  "brownDark",
+  "brownDarkA",
+  "crimson",
+  "crimsonA",
+  "crimsonDark",
+  "crimsonDarkA",
+  "cyan",
+  "cyanA",
+  "cyanDark",
+  "cyanDarkA",
+  "gold",
+  "goldA",
+  "goldDark",
+  "goldDarkA",
+  "grass",
+  "grassA",
+  "grassDark",
+  "grassDarkA",
+  "gray",
+  "grayA",
+  "grayDark",
+  "grayDarkA",
+  "green",
+  "greenA",
+  "greenDark",
+  "greenDarkA",
+  "indigo",
+  "indigoA",
+  "indigoDark",
+  "indigoDarkA",
+  "lime",
+  "limeA",
+  "limeDark",
+  "limeDarkA",
+  "mauve",
+  "mauveA",
+  "mauveDark",
+  "mauveDarkA",
+  "mint",
+  "mintA",
+  "mintDark",
+  "mintDarkA",
+  "olive",
+  "oliveA",
+  "oliveDark",
+  "oliveDarkA",
+  "orange",
+  "orangeA",
+  "orangeDark",
+  "orangeDarkA",
+  "pink",
+  "pinkA",
+  "pinkDark",
+  "pinkDarkA",
+  "plum",
+  "plumA",
+  "plumDark",
+  "plumDarkA",
+  "purple",
+  "purpleA",
+  "purpleDark",
+  "purpleDarkA",
+  "red",
+  "redA",
+  "redDark",
+  "redDarkA",
+  "sage",
+  "sageA",
+  "sageDark",
+  "sageDarkA",
+  "sand",
+  "sandA",
+  "sandDark",
+  "sandDarkA",
+  "sky",
+  "skyA",
+  "skyDark",
+  "skyDarkA",
+  "slate",
+  "slateA",
+  "slateDark",
+  "slateDarkA",
+  "teal",
+  "tealA",
+  "tealDark",
+  "tealDarkA",
+  "tomato",
+  "tomatoA",
+  "tomatoDark",
+  "tomatoDarkA",
+  "violet",
+  "violetA",
+  "violetDark",
+  "violetDarkA",
+  "whiteA",
+  "yellow",
+  "yellowA",
+  "yellowDark",
+  "yellowDarkA",
+] as const;
 
-export type RadixScales = Exclude<keyof typeof radix, "__esModule" | "default">;
-export type RadixColors = Exclude<
-  RadixScales,
-  `${RadixScales}Dark` | `${RadixScales}DarkA` | `${RadixScales}A` | "whiteA" | "blackA"
->;
+export type RadixScales = typeof radixScales[number];
 
-type StepIndex = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-type Scale = {
-  readonly [key in StepIndex]: string;
-};
+export const radixColors = [
+  "amber",
+  "blue",
+  "bronze",
+  "brown",
+  "crimson",
+  "cyan",
+  "gold",
+  "grass",
+  "gray",
+  "green",
+  "indigo",
+  "lime",
+  "mauve",
+  "mint",
+  "olive",
+  "orange",
+  "pink",
+  "plum",
+  "purple",
+  "red",
+  "sage",
+  "sand",
+  "sky",
+  "slate",
+  "teal",
+  "tomato",
+  "violet",
+  "yellow",
+] as const;
 
-type Palette = [string, Color][];
+export type RadixColors = typeof radixColors[number];
 
-type Color = {
-  light: Scale;
-  lightAlpha: Scale;
-  dark: Scale;
-  darkAlpha: Scale;
-};
+export const radixSteps = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as const;
 
-function getScale(name: string): Scale {
-  const rawScale = radix[name as RadixScales] as { [key: string]: string };
-
-  const keyValues = Object.keys(rawScale).map((key) => {
-    return [parseInt(key.match(/.*?(\d+)/)![1]), rawScale[key]];
-  });
-
-  return Object.fromEntries(keyValues);
-}
-
-export function getColor(name: RadixColors): Color {
-  return {
-    light: getScale(name),
-    lightAlpha: getScale(name + "A"),
-    dark: getScale(name + "Dark"),
-    darkAlpha: getScale(name + "DarkA"),
-  };
-}
-
-export function generateColors(palette: Palette, prefix: string) {
-  let colors: { [key: string]: { [key: number]: string } } = {};
-
-  palette.forEach(([name]) => {
-    let shades: { [key: number]: string } = {};
-    for (let shade = 1; shade <= 12; shade++) {
-      shades[shade] = `var(${prefix}${name}${shade})`;
-    }
-    colors[name] = shades;
-  });
-
-  return colors;
-}
-
-export function generateHues(prefix: string) {
-  const hue = Array.from({ length: 12 }, (_, i) => `var(${prefix}hue${i})`);
-  return { hue };
-}
-
-export function newPalette(...names: RadixColors[]): Palette {
-  return names.map((n) => [n, getColor(n)]);
-}
-
-export function genCSS(
-  palette: Palette,
-  darkSelector: string,
-  lightSelector: string,
-  prefix: string
-): string {
-  const css: string[] = [];
-
-  css.push(`${lightSelector} {`);
-  for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.light)) {
-      css.push(`${prefix}${label}${shade}:${value};`);
-    }
-    // for (const [shade, value] of Object.entries(color.lightAlpha)) {
-    //   css.push(`${prefix}${label}${shade}A:${value};`);
-    // }
-  }
-  css.push("}\n");
-
-  css.push(`${darkSelector} {`);
-  for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.dark)) {
-      css.push(`${prefix}${label}${shade}:${value};`);
-    }
-    // for (const [shade, value] of Object.entries(color.darkAlpha)) {
-    //   css.push(`${prefix}${label}${shade}:${value};`);
-    // }
-  }
-  css.push("}");
-
-  return css.join("");
-}
+export type RadixSteps = typeof radixSteps[number];
