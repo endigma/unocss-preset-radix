@@ -15,9 +15,6 @@ devDependencies:
   bumpp:
     specifier: ^9.1.0
     version: 9.1.0
-  petite-vue:
-    specifier: ^0.4.1
-    version: 0.4.1
   typescript:
     specifier: ^5.0.4
     version: 5.0.4
@@ -1513,10 +1510,6 @@ packages:
 
   /perfect-debounce@0.1.3:
     resolution: {integrity: sha512-NOT9AcKiDGpnV/HBhI22Str++XWcErO/bALvHCuhv33owZW/CjH8KAFLZDCmu3727sihe0wTxpDhyGc6M8qacQ==}
-    dev: true
-
-  /petite-vue@0.4.1:
-    resolution: {integrity: sha512-/gtYKQe9r1OV4IEwn2RsPXAHgFTe1nVq4QhldAP6/l8DSe9I754K6Oe1+Ff6dbnT5P8X2XP7PTUZkGRz5uFnFQ==}
     dev: true
 
   /picocolors@1.0.0:
