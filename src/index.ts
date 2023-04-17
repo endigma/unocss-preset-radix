@@ -28,6 +28,12 @@ export interface PresetRadixOptions {
 
   /** Add color aliases */
   aliases?: ColorAliases;
+
+  /**
+   * Extend instead of override the default theme
+   * @default false
+   */
+  extend?: boolean;
 }
 
 export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
@@ -48,6 +54,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
     lightSelector = ":root, .light-theme",
     palette: selectedColors,
     aliases: selectedAliases = {},
+    extend = false,
   } = options;
 
   const palette = newPalette(...selectedColors);
@@ -105,6 +112,8 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         transparent: "transparent",
         current: "currentColor",
         inherit: "inherit",
+
+        ...(extend ? theme.colors : []),
       };
     },
     preflights: [
