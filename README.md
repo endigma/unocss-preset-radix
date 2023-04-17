@@ -48,6 +48,10 @@ The selector used for dark mode palette. Default is `:root, .light-theme`.
 
 A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases.
 
+### extend
+
+A boolean that sets whether or not the preset will completely overwrite or merge with the previous palette. Default is `true`.
+
 ## `hue`
 
 With any scale included in your palette, you can use the utility `hue-{scale}` like `hue-red` or `hue-sand`. This sets a series of CSS variables that allow usage of `hue` in place of a color. For example:
