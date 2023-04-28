@@ -27,21 +27,29 @@ function getScale(name: string): Scale {
 export function getColor(name: RadixColors): Color {
   return {
     light: getScale(name),
-    lightAlpha: getScale(name + "A"),
-    dark: getScale(name + "Dark"),
-    darkAlpha: getScale(name + "DarkA"),
+    lightAlpha: getScale(`${name}A`),
+    dark: getScale(`${name}Dark`),
+    darkAlpha: getScale(`${name}DarkA`),
   };
 }
 
 export function generateColors(palette: Palette, prefix: string) {
-  let colors: { [key: string]: { [key: number]: string } } = {};
+  const colors: { [key: string]: { [key: number]: string } } = {};
 
-  palette.forEach(([name]) => {
-    let shades: { [key: number]: string } = {};
+  function generateColor(_name: string, isAlpha: boolean) {
+    const shades: { [key: number]: string } = {};
+    const name = isAlpha? `${_name}A` : _name;
+
     for (let shade = 1; shade <= 12; shade++) {
       shades[shade] = `var(${prefix}${name}${shade})`;
     }
+
     colors[name] = shades;
+  }
+
+  palette.forEach(([name]) => {
+    generateColor(name, false)
+    generateColor(name, true)
   });
 
   return colors;
@@ -64,19 +72,21 @@ export function genCSS(
 ): string {
   const css: string[] = [];
 
+  function pushVar(label: string, [shade, value]: [string, string], isAlpha: boolean = false) {
+    css.push(`${prefix}${label}${isAlpha ? "A" : ""}${shade}:${value};`);
+  }
+
   css.push(`${lightSelector} {`);
   for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.light)) {
-      css.push(`${prefix}${label}${shade}:${value};`);
-    }
+    Object.entries(color.light).forEach(entry => pushVar(label, entry))
+    Object.entries(color.lightAlpha).forEach(entry => pushVar(label, entry, true))
   }
   css.push("}\n");
 
   css.push(`${darkSelector} {`);
   for (const [label, color] of palette) {
-    for (const [shade, value] of Object.entries(color.dark)) {
-      css.push(`${prefix}${label}${shade}:${value};`);
-    }
+    Object.entries(color.dark).forEach(entry => pushVar(label, entry))
+    Object.entries(color.darkAlpha).forEach(entry => pushVar(label, entry, true))
   }
   css.push("}");
 

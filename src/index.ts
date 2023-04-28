@@ -39,6 +39,7 @@ export interface PresetRadixOptions {
 export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
   return Object.entries(aliases).reduce((o, [alias, target]) => {
     o[alias] = colors[target];
+    o[`${alias}A`] = colors[`${target}A`];
     return o;
   }, {} as { [key: string]: { [key: number]: string } });
 }
