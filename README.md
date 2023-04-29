@@ -30,7 +30,7 @@ export default defineConfig({
 
 ### palette
 
-An array of the Radix UI Colors you'd like to include. Dark mode is automatic.
+An array of the Radix UI Colors you'd like to include. Dark mode and alpha variants are automatic. Overlay colors are added by default.
 
 ### prefix
 
