@@ -46,7 +46,7 @@ The selector used for dark mode palette. Default is `:root, .light-theme`.
 
 ### aliases
 
-A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases.
+A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases. Alpha variants for aliases are generated automatically, so for then given alias `brand: blue`, an alias `brandA: blueA` will also be generated.
 
 ### extend
 
