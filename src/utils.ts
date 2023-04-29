@@ -14,8 +14,8 @@ type Color = {
   darkAlpha: Scale;
 };
 
-function getScale(name: string): Scale {
-  const rawScale = radix[name as RadixScales] as { [key: string]: string };
+function getScale(name: keyof typeof radix): Scale {
+  const rawScale = radix[name as RadixScales] as Record<string, string>;
 
   const keyValues = Object.keys(rawScale).map((key) => {
     return [parseInt(key.match(/.*?(\d+)/)![1]), rawScale[key]];
@@ -34,10 +34,10 @@ export function getColor(name: RadixColors): Color {
 }
 
 export function generateColors(palette: Palette, prefix: string) {
-  const colors: { [key: string]: { [key: number]: string } } = {};
+  const colors: Record<string, Record<number, string>> = {};
 
   function generateColor(_name: string, isAlpha: boolean) {
-    const shades: { [key: number]: string } = {};
+    const shades: Record<number, string> = {};
     const name = isAlpha? `${_name}A` : _name;
 
     for (let shade = 1; shade <= 12; shade++) {
@@ -48,9 +48,12 @@ export function generateColors(palette: Palette, prefix: string) {
   }
 
   palette.forEach(([name]) => {
-    generateColor(name, false)
-    generateColor(name, true)
+    generateColor(name, false);
+    generateColor(name, true);
   });
+
+  generateColor("black", true);
+  generateColor("white", true);
 
   return colors;
 }
@@ -76,19 +79,32 @@ export function genCSS(
     css.push(`${prefix}${label}${isAlpha ? "A" : ""}${shade}:${value};`);
   }
 
+  const blackAScale = getScale("blackA")
+  const whiteAScale = getScale("whiteA")
+
+  function pushOverlays() {
+    Object.entries(blackAScale).forEach(entry => pushVar("black", entry, true));
+    Object.entries(whiteAScale).forEach(entry => pushVar("white", entry, true));
+  }
+
   css.push(`${lightSelector} {`);
   for (const [label, color] of palette) {
-    Object.entries(color.light).forEach(entry => pushVar(label, entry))
-    Object.entries(color.lightAlpha).forEach(entry => pushVar(label, entry, true))
+    Object.entries(color.light).forEach(entry => pushVar(label, entry));
+    Object.entries(color.lightAlpha).forEach(entry => pushVar(label, entry, true));
   }
   css.push("}\n");
 
   css.push(`${darkSelector} {`);
   for (const [label, color] of palette) {
-    Object.entries(color.dark).forEach(entry => pushVar(label, entry))
-    Object.entries(color.darkAlpha).forEach(entry => pushVar(label, entry, true))
+    Object.entries(color.dark).forEach(entry => pushVar(label, entry));
+    Object.entries(color.darkAlpha).forEach(entry => pushVar(label, entry, true));
   }
   css.push("}");
+
+  css.push(":root {");
+  pushOverlays();
+  css.push("}");
+
 
   return css.join("");
 }

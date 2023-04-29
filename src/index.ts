@@ -4,7 +4,7 @@ import type { Preset } from "@unocss/core";
 
 export * from "./radix";
 
-export type ColorAliases = { [key: string]: RadixColors };
+export type ColorAliases = Record<string, RadixColors>;
 
 export interface PresetRadixOptions {
   palette: readonly RadixColors[];
@@ -41,7 +41,7 @@ export function generateAliases(colors: ReturnType<typeof generateColors>, alias
     o[alias] = colors[target];
     o[`${alias}A`] = colors[`${target}A`];
     return o;
-  }, {} as { [key: string]: { [key: number]: string } });
+  }, {} as Record<string, Record<number, string>>);
 }
 
 function minify(css: string) {
@@ -63,6 +63,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
   const hues = generateHues(prefix);
   const aliases = generateAliases(colors, selectedAliases);
 
+  console.log(colors)
   return {
     name: "unocss-preset-radix",
     layers: {
@@ -102,7 +103,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         },
       ],
     ],
-    extendTheme(theme: { [key: string]: any }) {
+    extendTheme(theme: Record<string, any>) {
       theme.colors = {
         ...colors,
         ...aliases,
