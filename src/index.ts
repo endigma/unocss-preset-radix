@@ -63,7 +63,6 @@ export function presetRadix(options: PresetRadixOptions): Preset {
   const hues = generateHues(prefix);
   const aliases = generateAliases(colors, selectedAliases);
 
-  console.log(colors)
   return {
     name: "unocss-preset-radix",
     layers: {
