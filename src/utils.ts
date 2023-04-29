@@ -59,7 +59,12 @@ export function generateColors(palette: Palette, prefix: string) {
 }
 
 export function generateHues(prefix: string) {
-  const hue = Array.from({ length: 12 }, (_, i) => `var(${prefix}hue${i})`);
+  const hue: Record<number, string> = {};
+
+  for (let shade = 1; shade <= 12; shade++) {
+    hue[shade] = `var(${prefix}hue${shade})`;
+  }
+
   return { hue };
 }
 
