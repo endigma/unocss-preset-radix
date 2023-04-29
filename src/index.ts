@@ -73,10 +73,18 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         /^hue-(.+)$/,
         ([, color]) => {
           let target: string = "";
-          if (selectedColors.includes(color as RadixColors)) {
+
+          const isAlphaVariant = color[color.length - 1] === "A"
+          const colorWithoutAlpha = isAlphaVariant ? color.substring(0, color.length - 1) : color;
+
+          if (selectedColors.includes(colorWithoutAlpha as RadixColors)) {
             target = color;
-          } else if (color in selectedAliases) {
-            target = selectedAliases[color];
+          } else if (colorWithoutAlpha in selectedAliases) {
+            target = selectedAliases[colorWithoutAlpha];
+
+            if (isAlphaVariant) {
+              target += "A";
+            }
           }
 
           if (target) {
