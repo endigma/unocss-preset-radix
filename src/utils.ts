@@ -79,14 +79,6 @@ export function genCSS(
     css.push(`${prefix}${label}${isAlpha ? "A" : ""}${shade}:${value};`);
   }
 
-  const blackAScale = getScale("blackA")
-  const whiteAScale = getScale("whiteA")
-
-  function pushOverlays() {
-    Object.entries(blackAScale).forEach(entry => pushVar("black", entry, true));
-    Object.entries(whiteAScale).forEach(entry => pushVar("white", entry, true));
-  }
-
   css.push(`${lightSelector} {`);
   for (const [label, color] of palette) {
     Object.entries(color.light).forEach(entry => pushVar(label, entry));
@@ -102,7 +94,8 @@ export function genCSS(
   css.push("}");
 
   css.push(":root {");
-  pushOverlays();
+  Object.entries(getScale("blackA")).forEach(entry => pushVar("black", entry, true));
+  Object.entries(getScale("whiteA")).forEach(entry => pushVar("white", entry, true));
   css.push("}");
 
 
