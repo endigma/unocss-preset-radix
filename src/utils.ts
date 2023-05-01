@@ -59,13 +59,17 @@ export function generateColors(palette: Palette, prefix: string) {
 }
 
 export function generateHues(prefix: string) {
-  const hue: Record<number, string> = {};
+  function createHue(postfix: string = ""): Record<number, string> {
+    const hue: Record<number, string> = {};
 
-  for (let shade = 1; shade <= 12; shade++) {
-    hue[shade] = `var(${prefix}hue${shade})`;
+    for (let shade = 1; shade <= 12; shade++) {
+      hue[shade] = `var(${prefix}hue${postfix}${shade})`;
+    }
+
+    return hue;
   }
 
-  return { hue };
+  return { hue: createHue(), hueA: createHue("A") };
 }
 
 export function newPalette(...names: RadixColors[]): Palette {

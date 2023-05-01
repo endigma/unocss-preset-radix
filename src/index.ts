@@ -74,36 +74,23 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         ([, color]) => {
           let target: string = "";
 
-          const isAlphaVariant = color[color.length - 1] === "A"
-          const colorWithoutAlpha = isAlphaVariant ? color.substring(0, color.length - 1) : color;
-
-          if (selectedColors.includes(colorWithoutAlpha as RadixColors)) {
+          if (selectedColors.includes(color as RadixColors)) {
             target = color;
-          } else if (colorWithoutAlpha in selectedAliases) {
-            target = selectedAliases[colorWithoutAlpha];
-
-            if (isAlphaVariant) {
-              target += "A";
-            }
+          } else if (color in selectedAliases) {
+            target = selectedAliases[color];
           }
 
           if (target) {
-            return minify(`
-              .hue-${color} {
-                ${prefix}hue1: var(${prefix}${target}1);
-                ${prefix}hue2: var(${prefix}${target}2);
-                ${prefix}hue3: var(${prefix}${target}3);
-                ${prefix}hue4: var(${prefix}${target}4);
-                ${prefix}hue5: var(${prefix}${target}5);
-                ${prefix}hue6: var(${prefix}${target}6);
-                ${prefix}hue7: var(${prefix}${target}7);
-                ${prefix}hue8: var(${prefix}${target}8);
-                ${prefix}hue9: var(${prefix}${target}9);
-                ${prefix}hue10: var(${prefix}${target}10);
-                ${prefix}hue11: var(${prefix}${target}11);
-                ${prefix}hue12: var(${prefix}${target}12);
-              }
-            `);
+            let css = `.hue-${color} {`;
+
+            for (let shade = 1; shade <= 12; shade++) {
+              css += `${prefix}hue${shade}: var(${prefix}${target}${shade});`
+              css += `${prefix}hueA${shade}: var(${prefix}${target}A${shade});`
+            }
+
+            css += "}";
+
+            return minify(css);
           }
 
           return "";
