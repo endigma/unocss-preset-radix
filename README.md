@@ -26,6 +26,10 @@ export default defineConfig({
 });
 ```
 
+## Alphas
+
+Alphas are available as extra shades in each scale. For example `bg-blue5` for solid, `bg-blue5A` for alpha.
+
 ## Options
 
 ### palette

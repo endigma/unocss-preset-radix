@@ -43,7 +43,7 @@
 
     <div x-data="scales">
       <template x-for="scale in scales">
-        <div>
+        <div :class="`hue-${scale}`">
           <h2 class="block mt-10" x-text="scale"></h2>
           <div class="flex flex-row gap-0.5">
             <span class="swatch p-4"></span>
@@ -53,14 +53,22 @@
           </div>
           <div class="flex flex-col gap-0.5">
             <template x-for="theme in ['dark', 'light']">
-              <div class="flex flex-row gap-0.5">
-                <span class="swatch p-4 text-sage11" x-text="theme"></span>
-                <div class="flex flex-row gap-0.5" :class="`${theme}-theme`">
-                  <template x-for="i in 12">
-                    <div
-                      class="swatch"
-                      :class="`bg-${scale}${i} text-${scale}${i < 8 ? 12 : 1}`"></div>
-                  </template>
+              <div class="flex flex-col gap-0.5">
+                <div class="flex flex-row gap-0.5">
+                  <span class="swatch p-4 text-sage11" x-text="theme"></span>
+                  <div class="flex flex-row gap-0.5" :class="`${theme}-theme`">
+                    <template x-for="i in 12">
+                      <div class="swatch" :class="`bg-hue${i}`"></div>
+                    </template>
+                  </div>
+                </div>
+                <div class="flex flex-row gap-0.5">
+                  <span class="swatch p-4 text-sage11">alpha</span>
+                  <div class="flex flex-row gap-0.5" :class="`${theme}-theme`">
+                    <template x-for="i in 12">
+                      <div class="swatch" :class="`bg-hue${i}A`"></div>
+                    </template>
+                  </div>
                 </div>
               </div>
             </template>
