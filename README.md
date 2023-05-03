@@ -30,7 +30,7 @@ export default defineConfig({
 
 ### palette
 
-An array of the Radix UI Colors you'd like to include. Dark mode is automatic.
+An array of the Radix UI Colors you'd like to include. Dark mode and alpha variants are automatic. Overlay colors are added by default.
 
 ### prefix
 
@@ -46,7 +46,7 @@ The selector used for dark mode palette. Default is `:root, .light-theme`.
 
 ### aliases
 
-A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases.
+A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases. Alpha variants for aliases are generated automatically, so for then given alias `brand: blue`, an alias `brandA: blueA` will also be generated.
 
 ### extend
 

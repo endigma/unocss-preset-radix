@@ -4,7 +4,7 @@ import type { Preset } from "@unocss/core";
 
 export * from "./radix";
 
-export type ColorAliases = { [key: string]: RadixColors };
+export type ColorAliases = Record<string, RadixColors>;
 
 export interface PresetRadixOptions {
   palette: readonly RadixColors[];
@@ -39,8 +39,9 @@ export interface PresetRadixOptions {
 export function generateAliases(colors: ReturnType<typeof generateColors>, aliases: ColorAliases) {
   return Object.entries(aliases).reduce((o, [alias, target]) => {
     o[alias] = colors[target];
+    o[`${alias}A`] = colors[`${target}A`];
     return o;
-  }, {} as { [key: string]: { [key: number]: string } });
+  }, {} as Record<string, Record<number, string>>);
 }
 
 function minify(css: string) {
@@ -72,6 +73,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         /^hue-(.+)$/,
         ([, color]) => {
           let target: string = "";
+
           if (selectedColors.includes(color as RadixColors)) {
             target = color;
           } else if (color in selectedAliases) {
@@ -79,29 +81,23 @@ export function presetRadix(options: PresetRadixOptions): Preset {
           }
 
           if (target) {
-            return minify(`
-              .hue-${color} {
-                ${prefix}hue1: var(${prefix}${target}1);
-                ${prefix}hue2: var(${prefix}${target}2);
-                ${prefix}hue3: var(${prefix}${target}3);
-                ${prefix}hue4: var(${prefix}${target}4);
-                ${prefix}hue5: var(${prefix}${target}5);
-                ${prefix}hue6: var(${prefix}${target}6);
-                ${prefix}hue7: var(${prefix}${target}7);
-                ${prefix}hue8: var(${prefix}${target}8);
-                ${prefix}hue9: var(${prefix}${target}9);
-                ${prefix}hue10: var(${prefix}${target}10);
-                ${prefix}hue11: var(${prefix}${target}11);
-                ${prefix}hue12: var(${prefix}${target}12);
-              }
-            `);
+            let css = `.hue-${color} {`;
+
+            for (let shade = 1; shade <= 12; shade++) {
+              css += `${prefix}hue${shade}: var(${prefix}${target}${shade});`
+              css += `${prefix}hueA${shade}: var(${prefix}${target}A${shade});`
+            }
+
+            css += "}";
+
+            return minify(css);
           }
 
           return "";
         },
       ],
     ],
-    extendTheme(theme: { [key: string]: any }) {
+    extendTheme(theme: Record<string, any>) {
       theme.colors = {
         ...colors,
         ...aliases,
