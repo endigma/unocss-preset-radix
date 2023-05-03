@@ -1,6 +1,6 @@
 {
   "name": "unocss-preset-radix",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "endigma <endigma@mailcat.ca>",
   "description": "A preset for UnoCSS providing access to the Radix UI color palette, along with some helpers for using it.",
   "scripts": {
