@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "esnext",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
@@ -12,9 +14,16 @@
     "skipLibCheck": true,
     "jsx": "preserve",
     "paths": {
-      "unocss-preset-radix": ["./src"]
+      "unocss-preset-radix": [
+        "./src"
+      ]
     }
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["**/dist/**", "**/node_modules/**"]
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "**/dist/**",
+    "**/node_modules/**"
+  ]
 }
