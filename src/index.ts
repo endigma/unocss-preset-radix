@@ -68,9 +68,6 @@ export function presetRadix(options: PresetRadixOptions): Preset {
 
   return {
     name: "unocss-preset-radix",
-    layers: {
-      radix: -2,
-    },
     rules: [
       [
         /^hue-(.+)$/,
@@ -117,7 +114,6 @@ export function presetRadix(options: PresetRadixOptions): Preset {
     },
     preflights: [
       {
-        layer: "radix",
         getCSS: () => genCSS(palette, darkSelector, lightSelector, prefix),
       },
     ],
