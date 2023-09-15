@@ -88,6 +88,7 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
               css += `${prefix}hue${shade}: var(${prefix}${target}${shade});`;
               css += `${prefix}hue${shade}A: var(${prefix}${target}${shade}A);`;
             }
+            css += `${prefix}hue-fg: var(${prefix}${target}-fg);`;
 
             css += "}";
 

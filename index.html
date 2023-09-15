@@ -8,7 +8,8 @@
     <link
       rel="icon"
       href="https://raw.githubusercontent.com/antfu/unocss/main/playground/public/favicon.svg"
-      type="image/svg+xml" />
+      type="image/svg+xml"
+    />
     <script type="module">
       import "uno.css";
       import { radixColors } from "./src";
@@ -58,7 +59,12 @@
                   <span class="swatch p-4 text-sage11" x-text="theme"></span>
                   <div class="flex flex-row gap-0.5" :class="`${theme}-theme`">
                     <template x-for="i in 12">
-                      <div class="swatch" :class="`bg-hue${i}`"></div>
+                      <div
+                        class="swatch"
+                        :class="`bg-hue${i} ${ i < 9 ? 'text-hue12' : 'text-hue-fg' }`"
+                      >
+                        fg
+                      </div>
                     </template>
                   </div>
                 </div>

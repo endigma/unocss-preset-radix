@@ -30,6 +30,10 @@ export default defineConfig({
 
 Alphas are available as extra shades in each scale. For example `bg-blue5` for solid, `bg-blue5A` for alpha.
 
+## Foregrounds
+
+The optimized foreground colors are available as `-fg` shades. For example `text-blue-fg` for white `text-amber-fg` for white. These colors are based on [the Radix docs](https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette#choosing-a-brand-scale). This also works with hues and aliases.
+
 ## Options
 
 ### palette

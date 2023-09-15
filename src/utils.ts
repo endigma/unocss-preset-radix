@@ -35,6 +35,13 @@ export function getColor(name: RadixColors): Color {
   };
 }
 
+function fg(color: string) {
+  if (["sky", "mint", "lime", "yellow", "amber"].includes(color)) {
+    return "black";
+  }
+  return "white";
+}
+
 export function generateColors(palette: Palette, prefix: string) {
   const colors: Record<string, Record<number, string>> = {};
 
@@ -45,6 +52,10 @@ export function generateColors(palette: Palette, prefix: string) {
     for (let shade = 1; shade <= 12; shade++) {
       shades[shade] = `var(${prefix}${name}${shade})`;
       shades[`${shade}A`] = `var(${prefix}${name}${shade}A)`;
+    }
+
+    if (!isAlpha) {
+      shades["fg"] = `var(${prefix}${name}-fg)`;
     }
 
     colors[name] = shades;
@@ -68,6 +79,10 @@ export function generateHues(prefix: string) {
     for (let shade = 1; shade <= 12; shade++) {
       hue[shade] = `var(${prefix}hue${postfix}${shade})`;
       hue[`${shade}A`] = `var(${prefix}hue${postfix}${shade}A)`;
+    }
+
+    if (postfix === "") {
+      hue["fg"] = `var(${prefix}hue-fg)`;
     }
 
     return hue;
@@ -115,6 +130,9 @@ export function genCSS(
   css.push("}");
 
   css.push(":root {");
+  for (const [label, color] of palette) {
+    css.push(`${prefix}${label}-fg:${fg(label)};`);
+  }
   Object.entries(getScale("blackA")).forEach((entry) =>
     pushVar("black", entry, true)
   );

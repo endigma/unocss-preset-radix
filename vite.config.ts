@@ -28,6 +28,11 @@ export default defineConfig(({ mode }) => ({
         presetUno(),
         presetRadix({
           palette: radixColors,
+
+          aliases: {
+            testa: "red",
+            testb: "amber",
+          },
         }),
       ],
       safelist: [
