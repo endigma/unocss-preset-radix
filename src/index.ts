@@ -1,6 +1,7 @@
 import { genCSS, generateColors, generateHues, newPalette } from "./utils";
 import type { RadixColors } from "./radix";
-import type { Preset } from "@unocss/core";
+import type { Preset } from "unocss";
+import type { Theme } from "unocss/preset-uno";
 
 export * from "./radix";
 
@@ -51,7 +52,7 @@ function minify(css: string) {
   return css.replace(/\n/g, "").replace(/\s+/g, "").trim();
 }
 
-export function presetRadix(options: PresetRadixOptions): Preset {
+export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
@@ -97,7 +98,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         },
       ],
     ],
-    extendTheme(theme: Record<string, Object>) {
+    extendTheme(theme: Theme) {
       theme.colors = {
         ...colors,
         ...aliases,
@@ -110,7 +111,7 @@ export function presetRadix(options: PresetRadixOptions): Preset {
         inherit: "inherit",
 
         ...(extend ? theme.colors : []),
-      };
+      } as Theme["colors"];
     },
     preflights: [
       {
