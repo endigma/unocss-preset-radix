@@ -24,8 +24,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@radix-ui/colors": "^0.1.8",
-    "@unocss/core": "^0.51.2"
+    "@radix-ui/colors": "3.0.0-rc.4",
+    "@unocss/core": "^0.55.7"
   },
   "sideEffects": false,
   "module": "./dist/index.mjs",
@@ -35,12 +35,12 @@
     "dist"
   ],
   "devDependencies": {
-    "alpinejs": "^3.12.0",
-    "bumpp": "^9.1.0",
-    "typescript": "^5.0.4",
-    "unocss": "^0.51.2",
-    "vite": "^4.2.1",
-    "vite-plugin-dts": "^2.2.0",
-    "vitest": "^0.30.0"
+    "alpinejs": "^3.13.0",
+    "bumpp": "^9.2.0",
+    "typescript": "^5.2.2",
+    "unocss": "^0.55.7",
+    "vite": "^4.4.9",
+    "vite-plugin-dts": "^3.5.3",
+    "vitest": "^0.34.4"
   }
 }
