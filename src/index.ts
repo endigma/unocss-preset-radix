@@ -72,7 +72,7 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
     rules: [
       [
         /^hue-(.+)$/,
-        ([, color]) => {
+        ([_, color]) => {
           let target: string = "";
 
           if (selectedColors.includes(color as RadixColors)) {
@@ -82,20 +82,18 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
           }
 
           if (target) {
-            let css = `.hue-${color} {`;
+            let css: Record<string, string> = {};
 
             for (let shade = 1; shade <= 12; shade++) {
-              css += `${prefix}hue${shade}: var(${prefix}${target}${shade});`;
-              css += `${prefix}hue${shade}A: var(${prefix}${target}${shade}A);`;
+              css[`${prefix}hue${shade}`] = `var(${prefix}${target}${shade})`;
+              css[`${prefix}hue${shade}A`] = `var(${prefix}${target}${shade}A)`;
             }
-            css += `${prefix}hue-fg: var(${prefix}${target}-fg);`;
+            css[`${prefix}hue-fg`] = `var(${prefix}${target}-fg)`;
 
-            css += "}";
-
-            return minify(css);
+            return css;
           }
 
-          return "";
+          return {};
         },
       ],
     ],
