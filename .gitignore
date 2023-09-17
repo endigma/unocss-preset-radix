@@ -10,3 +10,5 @@ logs
 node_modules
 temp
 .vercel
+docs/.vitepress/dist
+docs/.vitepress/cache

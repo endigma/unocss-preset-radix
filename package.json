@@ -9,7 +9,10 @@
     "build:demo": "vite build --mode demo",
     "test": "vitest",
     "test:update": "vitest -u",
-    "release": "bumpp --commit --push --tag && pnpm publish"
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "repository": {
     "type": "git",
@@ -41,6 +44,7 @@
     "unocss": "^0.55.7",
     "vite": "^4.4.9",
     "vite-plugin-dts": "^3.5.3",
+    "vitepress": "1.0.0-rc.14",
     "vitest": "^0.34.4"
   }
 }
