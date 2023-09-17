@@ -4,8 +4,7 @@ layout: home
 
 hero:
   name: "unocss-preset-radix"
-  text: "A unocss preset for Radix Colors"
-  tagline: My great project tagline
+  text: "A preset for UnoCSS to let you use Radix color palette "
   actions:
     - theme: brand
       text: Installation & Usage

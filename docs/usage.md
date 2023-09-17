@@ -22,7 +22,7 @@ $ yarn add -D unocss-preset-radix
 
 :::
 
-## Usage
+## Vite/UnoCSS configuration
 
 ```ts
 // uno.config.ts (or vite.config.ts)
@@ -42,6 +42,8 @@ export default defineConfig({
   ],
 });
 ```
+
+## Usage in HTML
 
 You will now have access to colors from your palette, like:
 
