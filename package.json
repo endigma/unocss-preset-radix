@@ -1,6 +1,6 @@
 {
   "name": "unocss-preset-radix",
-  "version": "2.5.4",
+  "version": "2.5.5",
   "author": "endigma <endigma@mailcat.ca>",
   "packageManager": "pnpm@8.7.5",
   "description": "A preset for UnoCSS providing access to the Radix UI color palette, along with some helpers for using it.",
@@ -10,7 +10,7 @@
     "build:demo": "vite build --mode demo",
     "test": "vitest",
     "test:update": "vitest -u",
-    "release": "bumpp --commit --push --tag && pnpm publish",
+    "release": "bumpp --commit --push --tag",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
