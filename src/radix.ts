@@ -113,6 +113,18 @@ export const radixScales = [
   "yellowA",
   "yellowDark",
   "yellowDarkA",
+  "jade",
+  "jadeA",
+  "jadeDark",
+  "jadeDarkA",
+  "ruby",
+  "rubyA",
+  "rubyDark",
+  "rubyDarkA",
+  "iris",
+  "irisA",
+  "irisDark",
+  "irisDarkA",
 ] as const;
 
 export type RadixScales = (typeof radixScales)[number];
@@ -146,6 +158,9 @@ export const radixColors = [
   "tomato",
   "violet",
   "yellow",
+  "jade",
+  "iris",
+  "ruby",
 ] as const;
 
 export type RadixColors = (typeof radixColors)[number];
