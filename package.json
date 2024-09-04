@@ -29,7 +29,8 @@
   "license": "MIT",
   "dependencies": {
     "@radix-ui/colors": "3.0.0-rc.4",
-    "@unocss/core": "^0.55.7"
+    "@unocss/core": "^0.55.7",
+    "colorjs.io": "^0.5.2"
   },
   "sideEffects": false,
   "module": "./dist/index.mjs",
