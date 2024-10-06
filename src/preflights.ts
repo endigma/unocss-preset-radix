@@ -3,7 +3,7 @@ import Color from "colorjs.io";
 import * as radixColors from "@radix-ui/colors";
 
 
-export function genPreflightCSS({
+export function generateCSSVariablesForColorsInUse({
   colorsInUse,
   aliasesInUse,
   darkSelector,
@@ -11,12 +11,12 @@ export function genPreflightCSS({
   prefix,
   useP3Colors,
   onlyOneTheme,
-  safeListAliases = [],
+  safelistAliases = [],
   aliases = {},
 }: {
   aliasesInUse: AliasesInUse;
   colorsInUse: ColorsInUse;
-} & Omit<Options, "extend" | "safeListColors">): string {
+} & Omit<Options, "extend" | "safelistColors">): string {
   const globalCSSRules: string[] = [];
   const globalP3CSSRules: string[] = [];
   const lightThemeCSSRules: string[] = [];
@@ -67,8 +67,8 @@ export function genPreflightCSS({
 
   // define aliases that are set in preset options
 
-  // for safeListedOnes, create all shades
-  for (const alias of safeListAliases) {
+  // for safelistedOnes, create all shades
+  for (const alias of safelistAliases) {
     if (!Object.keys(aliases).includes(alias)) continue;
     const hue = aliases[alias];
     for (let i = 1; i <= 12; i++) {
@@ -83,8 +83,8 @@ export function genPreflightCSS({
 
   // for those that are not safelisted, only create the shadeAlphas that are used in the porject.
   for (const alias of Object.keys(aliases)) {
-    // skip aliases that were in safeListAliases
-    if (safeListAliases.includes(alias)) continue;
+    // skip aliases that were in safelistAliases
+    if (safelistAliases.includes(alias)) continue;
     const hue = aliases[alias];
     for (const shadeAlpha of Object.keys(aliasesInUse[alias].shadesInUse)) {
       globalCSSRules.push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
