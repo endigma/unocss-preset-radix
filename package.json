@@ -14,7 +14,8 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "check-types": "tsc --pretty --noEmit"
+    "check-types": "tsc --pretty --noEmit",
+    "unocss:dev": "unocss -c uno.config.ts -o styles/uno.css --watch  \"./**/*.tsx\"  \"./**/*.md\" \"./lib/api.ts\" "
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "@radix-ui/colors": "3.0.0-rc.4",
+    "@unocss/cli": "^0.63.3",
     "@unocss/core": "^0.55.7",
     "colorjs.io": "^0.5.2"
   },

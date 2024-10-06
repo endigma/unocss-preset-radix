@@ -1,3 +1,4 @@
+import { Alpha, P3, Shade } from './types';
 
 export const RADIX_HUES = [
   "amber",
@@ -32,3 +33,8 @@ export const RADIX_HUES = [
   "iris",
   "ruby",
 ] as const;
+
+
+export const ALPHAS: Alpha[] = ['', 'A'] as const;
+export const P3S: P3[] = ['', 'P3'] as const;
+export const SHADES: Shade[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] as const;

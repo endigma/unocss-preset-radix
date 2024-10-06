@@ -1,6 +1,5 @@
-import { AliasesInUse, ColorsInUse } from './types';
-
-
+import { ALPHAS, SHADES } from './consts';
+import { Alias, Aliases, AliasesInUse, Alpha, ColorsInUse, Options, RadixHue, SafelistColor, Shade } from './types';
 
 const colorsInUse = {} as ColorsInUse;
 const aliasesInUse = {} as AliasesInUse;
@@ -14,11 +13,11 @@ export function getAliasesInUse() {
 }
 
 
-
-export function addsafelistColors<T extends Aliases>({
-  safelistColors,
-  aliases,
-}: Pick<Options<T>, 'safelistColors' | 'aliases'>) {
+export function addSafelistColors({
+  safelistColors = [],
+}: {
+  safelistColors: readonly SafelistColor[];
+}) {
   for (const color of safelistColors) {
     const match = color.match(/^([A-Za-z]+)(1|2|3|4|5|6|7|8|9|10|11|12)?(A)?$/);
     if (!match) continue;
@@ -27,56 +26,63 @@ export function addsafelistColors<T extends Aliases>({
     // if its a single shade
     if (shade) {
       if (['black', 'white'].includes(hue) && alpha === '') continue;
-      addColorToColorsInUse({ hue, shade, alpha });
+      addColor({ hue, shade, alpha });
     }
     // if a hue, add all shades and alphas ...
     if (!shade) {
       for (const a of ALPHAS) {
         if (['black', 'white'].includes(hue) && a === '') continue;
         for (const sh of SHADES) {
-          addColorToColorsInUse({ hue, shade: sh, alpha: a });
+          addColor({ hue, shade: sh, alpha: a });
         }
       }
     }
   }
 }
 
-export function addsafelistAliases<T extends Aliases>({
+
+export function addSafelistAliases({
   aliases,
-  safelistAliases,
-}: Pick<Options<T>, 'aliases' | 'safelistAliases'>) {
+  safelistAliases = [],
+}: {
+  aliases: Aliases;
+  safelistAliases: string[];
+}) {
   for (const color of safelistAliases) {
     const match = color.match(/^([A-Za-z]+)(1|2|3|4|5|6|7|8|9|10|11|12)?(A)?$/);
     if (!match) return;
     const [token, alias, shade, alpha] = match as [string, Alias, Shade, Alpha];
     if (!safelistAliases.includes(alias)) continue;
-    if (!Object.keys(aliases).includes(alias)) continue;
+    if (!(alias in aliases)) continue;
 
     const hue = aliases[alias];
     // if its a single shade
     if (shade) {
-      addAliasToAliasesInUse({ alias, shade, alpha, hue });
+      addAlias({ alias, shade, alpha, hue });
       // also add it colors in use
-      addColorToColorsInUse({ hue, shade, alpha });
+      addColor({ hue, shade, alpha });
     }
     // if a hue, add all shades and alphas ...
     if (!shade) {
       for (const a of ALPHAS) {
         for (const sh of SHADES) {
-          addAliasToAliasesInUse({ alias, shade: sh, alpha: a, hue });
+          addAlias({ alias, shade: sh, alpha: a, hue });
           // also add it colors in use
-          addColorToColorsInUse({ hue, shade: sh, alpha: a });
+          addColor({ hue, shade: sh, alpha: a });
         }
       }
     }
   }
 }
 
-export function addNotsafelistAliases<T extends Aliases>({
+export function addNotSafelistAliases({
   aliases,
-  safelistAliases,
-}: Pick<Options<T>, 'aliases' | 'safelistAliases'>) {
-  for (const alias of Object.keys(aliases)) {
+  safelistAliases = [],
+}: {
+  aliases: Aliases;
+  safelistAliases: string[];
+}) {
+  for (const alias in aliases) {
     if (safelistAliases.includes(alias)) continue;
     addHueToAnAliasInUse({ alias, hue: aliases[alias] });
   }
@@ -86,29 +92,29 @@ export function addNotsafelistAliases<T extends Aliases>({
     if (!match) continue;
     const [token, alias, shade, alpha] = match as [string, Alias, Shade, Alpha];
     if (!safelistAliases.includes(alias)) continue;
-    if (!Object.keys(aliases).includes(alias)) continue;
+    if (!(alias in aliases)) continue;
 
     const hue = aliases[alias];
     // if its a single shade
     if (shade) {
-      addAliasToAliasesInUse({ alias, shade, alpha, hue });
+      addAlias({ alias, shade, alpha, hue });
       // also add it colors in use
-      addColorToColorsInUse({ hue, shade, alpha });
+      addColor({ hue, shade, alpha });
     }
     // if a hue, add all shades and alphas ...
     if (!shade) {
       for (const a of ALPHAS) {
         for (const sh of SHADES) {
-          addAliasToAliasesInUse({ alias, shade: sh, alpha: a, hue });
+          addAlias({ alias, shade: sh, alpha: a, hue });
           // also add it colors in use
-          addColorToColorsInUse({ hue, shade: sh, alpha: a });
+          addColor({ hue, shade: sh, alpha: a });
         }
       }
     }
   }
 }
 
-export function addColorToColorsInUse({
+export function addColor({
   hue,
   shade,
   alpha,
@@ -122,7 +128,7 @@ export function addColorToColorsInUse({
   colorsInUse[hue].shadesInUse[`${shade}${alpha}`] = { hue, shade, alpha };
 }
 
-export function addAliasToAliasesInUse({
+export function addAlias({
   alias,
   shade,
   alpha,

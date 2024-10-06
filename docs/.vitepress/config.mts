@@ -2,6 +2,7 @@ import { defineConfig } from "vitepress";
 import { presetUno } from "unocss";
 import { presetRadix } from "../../src";
 import unocss from "unocss/vite";
+import { RADIX_HUES } from '../../src/consts';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -19,7 +20,7 @@ export default defineConfig({
               testb: "amber",
             },
             safelistAliases: ["testa"],
-            safelistColors: ["amber"],
+            safelistColors: RADIX_HUES,
           }),
         ],
         // safelist: [

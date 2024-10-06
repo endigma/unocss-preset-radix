@@ -1,5 +1,5 @@
 import { Theme } from 'unocss/preset-uno';
-import {  AliasesInUse, RadixHue } from './types';
+import { AliasesInUse, RadixHue } from './types';
 import { RADIX_HUES } from './consts';
 
 export function extendTheme({
@@ -39,7 +39,9 @@ export function extendTheme({
           useP3Colors
             ? {
               ...(extend ? colorsOfSameHueInOriginalTheme : {}),
+
               "fg": fg(hueOrAlias as RadixHue),
+
               "1": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}1) / <alpha-value>)`,
               "2": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}2) / <alpha-value>)`,
               "3": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}3) / <alpha-value>)`,
@@ -69,7 +71,9 @@ export function extendTheme({
             }
             : {
               ...(extend ? colorsOfSameHueInOriginalTheme : {}),
+
               "fg": fg(hueOrAlias as RadixHue),
+
               "1": `rgb(var(--${prefix}-${hueOrAlias}1) / <alpha-value>)`,
               "2": `rgb(var(--${prefix}-${hueOrAlias}2) / <alpha-value>)`,
               "3": `rgb(var(--${prefix}-${hueOrAlias}3) / <alpha-value>)`,
@@ -104,6 +108,9 @@ export function extendTheme({
       // if user has defind some variation for white (white-400 or white-warm)
       ...(extend && typeof theme?.colors?.["white"] !== "string" ? theme?.colors?.["white"] : {}),
       DEFAULT: "#ffffff",
+
+      fg: 'black',
+
       "1A": `var(--${prefix}-white1A)`,
       "2A": `var(--${prefix}-white2A)`,
       "3A": `var(--${prefix}-white3A)`,
@@ -120,6 +127,9 @@ export function extendTheme({
     black: {
       ...(extend && typeof theme?.colors?.["white"] !== "string" ? theme?.colors?.["white"] : {}),
       DEFAULT: "#000000",
+
+      fg: 'white',
+
       "1A": `var(--${prefix}-black1A)`,
       "2A": `var(--${prefix}-black2A)`,
       "3A": `var(--${prefix}-black3A)`,

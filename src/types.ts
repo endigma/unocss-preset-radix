@@ -36,10 +36,7 @@ export type Property = string;
 export type Alias = string;
 export type Aliases = Record<Alias, RadixHue>;
 
-type B = keyof Aliases;
-type C = `${B}${P3}`;
-
-export type safelistColor =
+export type SafelistColor =
   | RadixHue
   | `${RadixHue}${Shade}${Alpha}`
   | 'black'
@@ -68,7 +65,7 @@ export interface Options<T extends Aliases> {
   /**
    * Colors to preserve. You can specific color shade (like blue4 or blue5A) or add a color (like blue) to preserve all 12 shades
    */
-  safelistColors?: readonly safelistColor[];
+  safelistColors?: readonly SafelistColor[];
   /**
    * Alias to preserve. Each alias will preserve all of its 12 shades.
    */
@@ -114,54 +111,3 @@ export type AliasInUse = {
 export type ColorsInUse = Record<RadixHueOrBlackOrWhite, ColorInUse>;
 export type AliasesInUse = Record<string, AliasInUse>;
 
-type FunctionParams = {
-  foo: {
-    myVar: number;
-  };
-  bar: {
-    myVar: string;
-  };
-  baz: Record<string, number>;
-};
-type FunctionName = keyof FunctionParams;
-
-declare const sendRequest: (...args: any[]) => any;
-
-const callFunction = (
-  fn: FunctionName,
-  params: FunctionParams[FunctionName]
-  //                     ^^^^^^^^^ What should I put here?
-) => {
-  sendRequest(fn, params);
-};
-
-function callFunction2<T extends FunctionName>(
-  fn: T,
-  params: FunctionParams[T],
-) {
-  sendRequest(fn, params);
-};
-
-callFunction('foo', {
-  myVar: 'this should fail',
-  // This is allowed, as the type of the second parameter is:
-  // { myVar: number; } | { myVar: string; } | Record<string, number>) => void
-  // I want it to be { myVar: number; }
-});
-type Props<T> = { obj: T; key: keyof T };
-
-function deleteKey<T>({ obj, key }: Props<T>) {
-  delete obj[key];
-  return obj;
-}
-
-// interface Foo {
-//   a: string;
-//   b: number;
-//   c: boolean;
-// }
-
-const foo = { a: 'test', b: 12, c: true };
-const foo_minus_a = deleteKey({ obj: foo, key: 'a' });
-const foo_minus_b = deleteKey(foo, 'b');
-const foo_minus_c = deleteKey(foo, 'c');
