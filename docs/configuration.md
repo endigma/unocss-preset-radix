@@ -29,11 +29,11 @@ A boolean that sets whether or not the preset will completely overwrite or merge
 A boolean that sets whether or not to use the P3 colors. Default is `false`. 
 Note when using P3 colors, rgb colors are also added as fallbacks.
 
-### safeListColors
+### safelistColors
 
 An array of the Radix UI Colors or Specific shades of a color you'd like to safelist. Dark mode and alpha variants are automatically.
 
-### safeListAliases
+### safelistAliases
 
 An array of the Aliases you'd like to safelist. All 12 shades will be added automatically. Dark mode and alpha variants are automatically.
 The aliases should be present in aliases object.
