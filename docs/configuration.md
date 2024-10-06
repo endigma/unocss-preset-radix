@@ -1,8 +1,4 @@
-# Configuration
-
-### palette
-
-An array of the Radix UI Colors you'd like to include. Dark mode and alpha variants are automatic. Overlay colors are added by default.
+  # Configuration
 
 ### prefix
 
@@ -18,8 +14,31 @@ The selector used for dark mode palette. Default is `:root, .light-theme`.
 
 ### aliases
 
-A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette. You cannot set aliases to other aliases. Alpha variants for aliases are generated automatically, so for then given alias `brand: blue`, an alias `brandA: blueA` will also be generated.
+A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette.
+You cannot set aliases to other aliases.
+You cannot set aliases to `black` or `white`.
+The Alias name can not be a Radix Hue names.
+Alpha variants for aliases are generated automatically, so for then given alias `brand: blue`, an alias `brandA: blueA` will also be generated.
 
 ### extend
 
 A boolean that sets whether or not the preset will completely overwrite or merge with the previous palette. Default is `false`.
+
+### useP3Colors 
+
+A boolean that sets whether or not to use the P3 colors. Default is `false`. 
+Note when using P3 colors, rgb colors are also added as fallbacks.
+
+### safeListColors
+
+An array of the Radix UI Colors or Specific shades of a color you'd like to safelist. Dark mode and alpha variants are automatically.
+
+### safeListAliases
+
+An array of the Aliases you'd like to safelist. All 12 shades will be added automatically. Dark mode and alpha variants are automatically.
+The aliases should be present in aliases object.
+
+### onlyOneTheme
+
+If you only want to use `dark` or `light` theme, set this to `light` or `dark` respectively. So, CSS variables for other theme is not added to CSS. Default is `undefined`.
+When onlyOneTheme is set to `dark` or `light`, the darkSelector and lightSelector will be ignored and all CSS variables will be added to the :root selector.
