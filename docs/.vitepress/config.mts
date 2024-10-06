@@ -1,6 +1,6 @@
 import { defineConfig } from "vitepress";
 import { presetUno } from "unocss";
-import { presetRadix, radixColors } from "../../src";
+import { presetRadix } from "../../src";
 import unocss from "unocss/vite";
 
 // https://vitepress.dev/reference/site-config
@@ -13,20 +13,20 @@ export default defineConfig({
         presets: [
           presetUno(),
           presetRadix({
-            palette: radixColors,
             darkSelector: ".dark",
-
             aliases: {
               testa: "red",
               testb: "amber",
             },
+            safelistAliases: ["testa"],
+            safelistColors: ["amber"],
           }),
         ],
-        safelist: [
-          ...radixColors.map((p) => `hue-${p}`),
-          ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}`),
-          ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}A`),
-        ],
+        // safelist: [
+        //   ...radixColors.map((p) => `hue-${p}`),
+        //   ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}`),
+        //   ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}A`),
+        // ],
       }),
     ],
   },
