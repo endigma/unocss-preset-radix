@@ -1,80 +1,126 @@
 import { Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
-import { type Options, Aliases, Alpha, HueOrAlias, Property, SafelistColor, Shade, Token } from './types';
+import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Shade } from './types';
 
 import { generateCSSVariablesForColorsInUse } from './preflights';
-import { AddToColorInUse, detectAndAddToColorsInUse } from './shortcuts';
 import { addP3Fallbacks } from './variants';
 import { extendTheme } from './extendTheme';
-// import addP3FallbacksVariant from './addP3FallbacksVariant';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
-// import detectAndAddToColorsInUseShortcut from './shortcuts';
+import * as aliasesInUseHelpers from './aliasesInUseHelpers';
+import {
+  filterValidAliases,
+  filterValidSafelistAliases,
+  filterValidSafelistColors,
+  isValidAlias,
+  isValidAliasName,
+  isValidColor,
+  isValidPrefix,
+  isValidRadixHue,
+} from './validation';
 
 export function presetRadix<T extends Aliases>({
   useP3Colors = false,
   prefix: _prefix = '--un-preset-radix-',
   darkSelector = '.dark-theme',
   lightSelector = ':root, .light-theme',
-  safelistColors = [] as SafelistColor[],
+  safelistColors: _safelistColors,
   aliases: _aliases,
   safelistAliases: _safelistAliases,
   extend = false,
   onlyOneTheme,
+  layer = 'radix-colors'
 }: Options<T>): Preset<Theme> {
-  let prefix = _prefix.replaceAll('-', ' ').trim().replaceAll(' ', '-'); // remove hyphens from start and end.
-  // const aliases = _aliases ?? {};
-  const aliases = _aliases as Aliases;
-  const safelistAliases = (_safelistAliases ?? []) as string[];
+  let prefix = isValidPrefix(_prefix) ? _prefix : '--un-preset-radix-';
+  // remove hyphens from start and end of prefix.
+  prefix = prefix.replaceAll('-', ' ').trim().replaceAll(' ', '-');
 
-  colorsInUseHelpers.addSafelistColors({ safelistColors }); // add all 12 shaded and 12 alpha shades
-  colorsInUseHelpers.addSafelistAliases({ safelistAliases, aliases }); // add all 12 shaded and 12 alpha shades
-  colorsInUseHelpers.addNotSafelistAliases({ safelistAliases, aliases }); // this one only adds hues-shade-alphas that are used in project
+  // filter valid user inputs + flatten them (blue -> blue1, blue2, ..., blue12,... , blue12A, blue-fg)
+  const safelistColors = filterValidSafelistColors((_safelistColors ?? []) as string[]);
+  const aliases = filterValidAliases(_aliases ?? {});
+  const safelistAliases = filterValidSafelistAliases((_safelistAliases ?? []) as string[], aliases);
+
+  // add safelist colors to colors in use
+  for (const safelistColor in safelistColors) {
+    const { hue, shade, alpha } = safelistColors[safelistColor];
+    colorsInUseHelpers.addColor({ hue, shade, alpha });
+  }
+
+  // add safelist aliases to aliaes in use + add respective hue to AliasesInUse
+  for (const safelistAlias in safelistAliases) {
+    const { alias, shade, alpha } = safelistAliases[safelistAlias];
+    const hue = aliases[alias];
+
+    aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: hue });
+    aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+  }
+
+  // also add the color right away whether it is used in project or not.
+  for (const safelistAlias in safelistAliases) {
+    const { alias, shade, alpha } = safelistAliases[safelistAlias];
+    // colorsInUseHelpers.addAllPossibleColorsOfAnAlias({ alias });
+  }
+
+  // add a possible hue for other aliase
+  // don't add any color right away. Colors are added when aliase usage is detected
+  for (const alias in aliases) {
+    aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: aliases[alias] });
+  }
+
 
   return {
     name: 'unocss-preset-radix',
-    // sortLayers: (layers: string[]) => {
-    //   return ['radix-colors' , ...layers.filter((layer) => layer !== 'radix-colors')];
-    // },
     layers: {
       preflights: 1,
-      'radix-colors': 2,
+      [layer]: 2,
       default: 3,
     },
     shortcuts: [
       // This shortcut exsit so generated css for colors to have same order.
       [/^(.*)-(transparent|white|black|current|current-color|inherit)$/, ([token]) => `${token}`, { layer: 'default' }],
-      // This shortcut detects the usage of radix colors or aliases and add used colors to colros in use. Preflight will generate css variables for them.
-      // ([a-z]+)|([a-z]+(-[a-z]+)+) is regex for a kebab-case word made of only small letters and hypens.
+      // Detect usage of radix colors or aliases and handle it (by adding to colors in use). Preflight will generate css variables for based off colorsInUse and aliasesInUse.
       [
-        /^([a-z-]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12)(A)?$/,
+        /^([a-z]+(-[a-z]+)*)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?$/,
         (match) => {
           if (!match) return;
-          const [token, property, hueOrAlias, shade, alpha = ''] = match as [Token, Property, HueOrAlias, Shade, Alpha];
-          return AddToColorInUse({ token, hueOrAlias, shade, alpha, useP3Colors });
-        },
-        { layer: 'default' },
-      ],
-    ],
-    rules: [
-      // this shortcut detects usage of radix colors or aliases as css variables.
-      // ex: var(--un-preset-radix-pink9), var(--un-preset-radix-pink9A )
-      [
-        /^var\(--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12)(A)?(\))?$/,
-        (match) => {
-          if (!match) return;
-          const [token, matchedPrefix, hueOrAlias, shade, alpha = '', closingBracket] = match as [
-            Token,
+          const [token, property, propertyInnerGroup, hueOrAlias, shade, alpha = ''] = match as [
+            string,
+            string,
             string,
             HueOrAlias,
             Shade,
-            Alpha,
-            string
+            Alpha
           ];
-          console.log('🚀 ~ in the rule hueOrAlias:', token);
-          if (matchedPrefix !== prefix) return;
-          AddToColorInUse({ token, hueOrAlias, shade, alpha, useP3Colors });
-          // do not return anything.
-          return ""
+
+          if (isValidColor({ hue: hueOrAlias, shade, alpha })) {
+            const hue = hueOrAlias as RadixHue | 'white' | 'black';
+            colorsInUseHelpers.addColor({ hue, shade, alpha });
+
+            return useP3Colors && shade !== '-fg' ? `with-P3-fallbacks:${token}` : token;
+          }
+
+          if (isValidAlias({ alias: hueOrAlias, shade, alpha, aliases })) {
+            const alias = hueOrAlias;
+            aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+            return useP3Colors && shade !== '-fg' ? `with-P3-fallbacks:${token}` : token;
+          }
+
+          return token;
+        },
+        { layer: 'default' },
+      ],
+      // detect usage of dynamic aliasing and handle it.
+      // using unocss shortcut instead of rule since shortcut runs earlier. So we are aware of all dynamic aliasing usage before processing alias usages
+      // example: alias-warning-amber
+      [
+        /^alias-([a-z]+(-[a-z]+)*)-([a-z]+)$/,
+        (match) => {
+          if (!match) return;
+          const [token, alias, aliasInnerGroup, hue] = match as [string, string, string, RadixHue];
+          if (!isValidRadixHue(hue)) return '';
+          if (!isValidAliasName(alias)) return '';
+          aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: hue });
+          aliasesInUseHelpers.addScope({ alias, selector: `.${token}`, hue });
+          return;
         },
         { layer: 'default' },
       ],
@@ -83,27 +129,21 @@ export function presetRadix<T extends Aliases>({
     preflights: [
       {
         getCSS: (context) => {
-          const colorsInUse = colorsInUseHelpers.getColorsInUse();
-          const aliasesInUse = colorsInUseHelpers.getAliasesInUse();
-          // this generates css variables for all colors and aliases in use
+          // generate css variables for all colors and aliases in use
           return generateCSSVariablesForColorsInUse({
-            colorsInUse,
-            aliasesInUse,
             darkSelector,
             lightSelector,
             prefix,
             useP3Colors,
             onlyOneTheme,
-            safelistAliases,
             aliases,
           });
-        },
-        layer: 'radix-colors',
+        },  
+        layer: layer,
       },
     ],
     extendTheme: (theme: Theme) => {
-      const aliasesInUse = colorsInUseHelpers.getAliasesInUse();
-      return extendTheme({ theme, prefix, extend, useP3Colors, aliasesInUse });
+      return extendTheme({ theme, prefix, extend, useP3Colors });
     },
   };
 }

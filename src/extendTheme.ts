@@ -1,20 +1,21 @@
 import { Theme } from 'unocss/preset-uno';
-import { AliasesInUse, RadixHue } from './types';
 import { RADIX_HUES } from './consts';
+import * as aliasesInUseHelpers from './aliasesInUseHelpers';
+
 
 export function extendTheme({
   theme,
   prefix,
   extend,
   useP3Colors = false,
-  aliasesInUse
 }: {
   theme: Theme;
   prefix: string;
   extend: boolean;
   useP3Colors: boolean;
-  aliasesInUse: AliasesInUse
 }) {
+  const aliasesInUse = aliasesInUseHelpers.getAliasesInUse();
+
   theme.colors = {
     ...(extend ? theme?.colors : []),
     transparent: "transparent",
@@ -40,8 +41,8 @@ export function extendTheme({
             ? {
               ...(extend ? colorsOfSameHueInOriginalTheme : {}),
 
-              "fg": fg(hueOrAlias as RadixHue),
-
+              "fg": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}-fg) / <alpha-value>)`,
+              
               "1": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}1) / <alpha-value>)`,
               "2": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}2) / <alpha-value>)`,
               "3": `color(display-p3 var(--${prefix}-P3-${hueOrAlias}3) / <alpha-value>)`,
@@ -72,7 +73,7 @@ export function extendTheme({
             : {
               ...(extend ? colorsOfSameHueInOriginalTheme : {}),
 
-              "fg": fg(hueOrAlias as RadixHue),
+              "fg": `rgb(var(--${prefix}-${hueOrAlias}-fg) / <alpha-value>)`,
 
               "1": `rgb(var(--${prefix}-${hueOrAlias}1) / <alpha-value>)`,
               "2": `rgb(var(--${prefix}-${hueOrAlias}2) / <alpha-value>)`,
@@ -146,10 +147,3 @@ export function extendTheme({
   } as Theme["colors"];
 }
 
-
-function fg(color: RadixHue) {
-  if (["sky", "mint", "lime", "yellow", "amber"].includes(color)) {
-    return "black";
-  }
-  return "white";
-}

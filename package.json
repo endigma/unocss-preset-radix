@@ -15,7 +15,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "check-types": "tsc --pretty --noEmit",
-    "unocss:dev": "unocss -c uno.config.ts -o styles/uno.css --watch  \"./**/*.tsx\"  \"./**/*.md\" \"./lib/api.ts\" "
+    "unocss:dev": "unocss -c uno.config.ts -o styles/uno.css --watch  \"./**/*.tsx\" "
   },
   "repository": {
     "type": "git",

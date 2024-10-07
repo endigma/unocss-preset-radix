@@ -1,55 +1,76 @@
-import { Aliases, Alpha, Dark, Options, P3, RadixHue, RadixHueOrBlackOrWhite, Shade, ShadeAlpha } from './types';
+import { Alpha, Dark, P3, RadixHue, Shade, ShadeAlpha } from './types';
 import Color from 'colorjs.io';
 import * as radixColors from '@radix-ui/colors';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
+import * as aliasesInUseHelpers from './aliasesInUseHelpers';
+import { fg } from './fg';
 
-export function generateCSSVariablesForColorsInUse<T extends Aliases>({
+type Props = {
+  darkSelector: string;
+  lightSelector: string;
+  prefix: string;
+  useP3Colors: boolean;
+  onlyOneTheme?: string | null;
+  aliases: Record<string, RadixHue>;
+};
+
+export function generateCSSVariablesForColorsInUse({
   darkSelector,
   lightSelector,
   prefix,
   useP3Colors,
-  onlyOneTheme,
-  safelistAliases: _safelistAliases,
-  aliases: _aliases,
-}: Omit<Options<T>, 'extend' | 'safelistColors'>): string {
-  const aliases = (_aliases ?? {}) as Record<string, RadixHue>;
-  const safelistAliases = (_safelistAliases ?? []) as string[];
-  const globalCSSRules: string[] = [];
-  const globalP3CSSRules: string[] = [];
-  const lightThemeCSSRules: string[] = [];
-  const lightThemeP3CSSRules: string[] = [];
-  const darkThemeCSSRules: string[] = [];
-  const darkThemeP3CSSRules: string[] = [];
+  onlyOneTheme = null,
+  aliases = {},
+}: Props): string {
+  const aliasesInUse = aliasesInUseHelpers.getAliasesInUse();
+
+  // for all aliase-shade-alpha used, add corresponding colors (or possible colors) to colorsInuse
+  for (const alias in aliasesInUse) {
+    for (const possibleHue of aliasesInUse[alias].possibleHues) {
+      for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
+        const { alpha, shade } = aliasesInUse[alias].shadesInUse[shadeAlpha as ShadeAlpha];
+        colorsInUseHelpers.addColor({ hue: possibleHue, shade, alpha });
+      }
+    }
+  }
+
+  const cssRules: Record<string, string[]> = {
+    global: [],
+    globalP3: [],
+    lightTheme: [],
+    lightThemeP3: [],
+    darkTheme: [],
+    darkThemeP3: [],
+  };
 
   const colorsInUse = colorsInUseHelpers.getColorsInUse();
-  const aliasesInUse = colorsInUseHelpers.getAliasesInUse();
 
-  // const colorsInUse = colors
   for (const _hue in colorsInUse) {
-    for (const shadeAlpha in colorsInUse[_hue as RadixHueOrBlackOrWhite].shadesInUse) {
-      const { hue, shade, alpha } = colorsInUse[_hue as RadixHueOrBlackOrWhite].shadesInUse[shadeAlpha as ShadeAlpha];
+    for (const shadeAlpha in colorsInUse[_hue as RadixHue | 'black' | 'white'].shadesInUse) {
+      const { hue, shade, alpha } =
+        colorsInUse[_hue as RadixHue | 'black' | 'white'].shadesInUse[shadeAlpha as ShadeAlpha];
 
-      if (['black', 'white'].includes(hue)) {
-        globalCSSRules.push(
+      if (['black', 'white'].includes(hue) || shade === '-fg') {
+        cssRules.global.push(
           `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: '' })};`
         );
         if (useP3Colors) {
-          globalP3CSSRules.push(
+          cssRules.globalP3.push(
             `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
           );
         }
       } else {
-        lightThemeCSSRules.push(
+        cssRules.lightTheme.push(
           `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: '' })};`
         );
-        darkThemeCSSRules.push(
+        cssRules.darkTheme.push(
           `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: 'Dark', p3: '' })};`
         );
         if (useP3Colors) {
-          lightThemeP3CSSRules.push(
+          cssRules.lightThemeP3.push(
             `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
           );
-          darkThemeP3CSSRules.push(
+          cssRules.darkThemeP3.push(
             `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({
               hue,
               shade,
@@ -63,79 +84,92 @@ export function generateCSSVariablesForColorsInUse<T extends Aliases>({
     }
   }
 
-  // define aliases that are set in preset options
-
-  // for safelistedOnes, create all shades
-  for (const alias of safelistAliases) {
-    if (!(alias in aliases)) continue;
+  for (const alias in aliasesInUse) {
     const hue = aliases[alias];
-    for (let i = 1; i <= 12; i++) {
-      globalCSSRules.push(`--${prefix}-${alias}${i}: var(--${prefix}-${hue}${i});`);
-      globalCSSRules.push(`--${prefix}-${alias}${i}A: var(--${prefix}-${hue}${i}A);`);
-      if (useP3Colors) {
-        globalCSSRules.push(`--${prefix}-P3-${alias}${i}: var(--${prefix}-P3-${hue}${i});`);
-        globalCSSRules.push(`--${prefix}-P3-${alias}${i}A: var(--${prefix}-P3-${hue}${i}A);`);
-      }
-    }
-  }
-
-  // for those that are not safelisted, only create the shadeAlphas that are used in the porject.
-  for (const alias in aliases) {
-    // skip aliases that were in safelistAliases
-    if (safelistAliases.includes(alias)) continue;
-    const hue = aliases[alias];
+    // for hues that are not defined in the aliases (defiend via dynamic aliasing), skip.
+    if (!hue) continue;
     for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
-      globalCSSRules.push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
+      cssRules.global.push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
       if (useP3Colors) {
-        globalCSSRules.push(`--${prefix}-P3-${alias}${shadeAlpha}: var(--${prefix}-P3-${hue}${shadeAlpha});`);
+        cssRules.globalP3.push(`--${prefix}-P3-${alias}${shadeAlpha}: var(--${prefix}-P3-${hue}${shadeAlpha});`);
       }
     }
   }
+
+  const scopeRules = {} as Record<string, string[]>;
+
+  
+  for (const alias in aliasesInUse) {
+    const scopes = aliasesInUse[alias].scopes;
+    
+    for (const selector in scopes) {
+      const hue = scopes[selector];
+      for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
+        scopeRules[selector] ??= [];
+        scopeRules[selector].push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
+        if (useP3Colors) {
+          scopeRules[selector].push(`--${prefix}-P3-${alias}${shadeAlpha}: var(--${prefix}-P3-${hue}${shadeAlpha});`);
+        }
+      }
+    }
+  }
+
+  const scopeCss = Object.keys(scopeRules)
+    .map((selector) => {
+      return `${selector} {
+${scopeRules[selector].join('\n')}
+}`;
+    })
+    .join('\n');
 
   let css = `:root {
-    ${[
-      globalCSSRules.join('\n'),
-      onlyOneTheme === 'light' ? lightThemeCSSRules.join('\n') : '',
-      onlyOneTheme === 'dark' ? darkThemeCSSRules.join('\n') : '',
-    ].join('\n')}
-  }`;
-
-  if (useP3Colors) {
-    css = `${css}
-    @supports(color: color(display-p3 0 0 1)) {
-      :root {
-        ${[
-        globalP3CSSRules.join('\n'),
-        onlyOneTheme === 'light' ? lightThemeP3CSSRules.join('\n') : '',
-        onlyOneTheme === 'dark' ? darkThemeP3CSSRules.join('\n') : '',
-      ].join('\n')}
-    }`;
-  }
-
-  if (onlyOneTheme) return css;
-
-  //  if both light and dark theme exist
-  css = `${css}
-${lightSelector} {
-  ${lightThemeCSSRules.join('\n')}
-}
-${darkSelector} {
-  ${darkThemeCSSRules.join('\n')}
+  ${[
+    cssRules.global.join('\n'),
+    onlyOneTheme === 'light' ? cssRules.lightTheme.join('\n') : undefined,
+    onlyOneTheme === 'dark' ? cssRules.darkTheme.join('\n') : undefined,
+  ].join('\n')}
 }`;
 
   if (useP3Colors) {
     css = `${css}
 @supports(color: color(display-p3 0 0 1)) {
-  ${lightSelector} {
-    ${lightThemeP3CSSRules.join('\n')}
-  }
-  ${darkSelector} {
-    ${darkThemeP3CSSRules.join('\n')}
+  :root {
+  ${[
+    cssRules.globalP3.join('\n'),
+    onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('\n') : undefined,
+    onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('\n') : undefined,
+  ].join('\n')}
   }
 }`;
   }
 
-  return css.replaceAll('\n\n', '\n').replaceAll('  ', ' ').replaceAll('\n \n', '');
+  css = `${css}
+${scopeCss}`;
+
+  //  if both light and dark theme exist
+  if (!onlyOneTheme) {
+    css = `${css}
+${lightSelector} {
+  ${cssRules.lightTheme.join('\n')}
+}
+${darkSelector} {
+  ${cssRules.darkTheme.join('\n')}
+}`;
+
+    if (useP3Colors) {
+      css = `${css}
+@supports(color: color(display-p3 0 0 1)) {
+  ${lightSelector} {
+    ${cssRules.lightThemeP3.join('\n')}
+  }
+  ${darkSelector} {
+    ${cssRules.darkThemeP3.join('\n')}
+  }
+}`;
+    }
+  }
+
+  return css.replaceAll('\n\n', '\n').replaceAll('\n \n', '');
 }
 
 function getColorValue({
@@ -151,14 +185,14 @@ function getColorValue({
   shade: Shade;
   p3?: P3;
 }) {
+  if (shade === '-fg') return fg(hue);
+
   let value = '';
   //@ts-ignore
   value = radixColors[`${hue}${dark}${p3}${alpha}`][`${hue}${alpha}${shade}`];
 
   if (p3 === 'P3') {
-    if (alpha === 'A') {
-      return value;
-    }
+    if (alpha === 'A') return value;
     if (alpha === '') {
       // return in p3 format ex: '1 4 5'
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
@@ -167,7 +201,7 @@ function getColorValue({
   }
 
   if (p3 === '') {
-    // convert Hex values to rgb values
+    // convert Hex or rgb values to rgb values
     const color = new Color(value);
 
     if (alpha === 'A') {

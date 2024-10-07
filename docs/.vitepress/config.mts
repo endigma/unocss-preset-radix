@@ -21,6 +21,7 @@ export default defineConfig({
             },
             safelistAliases: ["testa"],
             safelistColors: RADIX_HUES,
+            extend: 3
           }),
         ],
         // safelist: [

@@ -5,7 +5,7 @@ import { RADIX_HUES } from "../src/consts";
 
 # Colors
 
-<div v-for="scale in RADIX_HUES">
+<div v-for="scale in RADIX_HUES" style="--my-color:var(--un-preset-radix-red6)">
 	<div :class="`hue-${scale} text-${scale}9 `">
 		<h2 class="block mt-10">{{ scale }}</h2>
 		<div class="flex flex-row gap-0.5">

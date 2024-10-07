@@ -1,8 +1,7 @@
 import { VariantContext, CSSEntries } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
-import {   type Options } from './types';
 
-export function addP3Fallbacks({ prefix }: { prefix: Options['prefix'] }) {
+export function addP3Fallbacks({ prefix }: { prefix: string }) {
   return {
     name: 'with P3 fallbacks',
     match: (matcher: string, context: Readonly<VariantContext<Theme>>) => {
