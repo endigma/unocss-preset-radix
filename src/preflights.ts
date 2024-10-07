@@ -1,14 +1,4 @@
-import {
-  Aliases,
-  Alpha,
-  Dark,
-  Options,
-  P3,
-  RadixHue,
-  RadixHueOrBlackOrWhite,
-  Shade,
-  ShadeAlpha,
-} from './types';
+import { Aliases, Alpha, Dark, Options, P3, RadixHue, RadixHueOrBlackOrWhite, Shade, ShadeAlpha } from './types';
 import Color from 'colorjs.io';
 import * as radixColors from '@radix-ui/colors';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
@@ -102,21 +92,23 @@ export function generateCSSVariablesForColorsInUse<T extends Aliases>({
     }
   }
 
-  let css = `
-  :root {
-    ${globalCSSRules.join('\n')}
-    ${onlyOneTheme === 'light' ? lightThemeCSSRules.join('\n') : ''}
-    ${onlyOneTheme === 'dark' ? darkThemeCSSRules.join('\n') : ''}
+  let css = `:root {
+    ${[
+      globalCSSRules.join('\n'),
+      onlyOneTheme === 'light' ? lightThemeCSSRules.join('\n') : '',
+      onlyOneTheme === 'dark' ? darkThemeCSSRules.join('\n') : '',
+    ].join('\n')}
   }`;
 
   if (useP3Colors) {
     css = `${css}
     @supports(color: color(display-p3 0 0 1)) {
       :root {
-        ${globalP3CSSRules.join('\n')}
-        ${onlyOneTheme === 'light' ? lightThemeP3CSSRules.join('\n') : ''}
-        ${onlyOneTheme === 'dark' ? darkThemeP3CSSRules.join('\n') : ''}
-      }
+        ${[
+        globalP3CSSRules.join('\n'),
+        onlyOneTheme === 'light' ? lightThemeP3CSSRules.join('\n') : '',
+        onlyOneTheme === 'dark' ? darkThemeP3CSSRules.join('\n') : '',
+      ].join('\n')}
     }`;
   }
 
@@ -129,8 +121,7 @@ ${lightSelector} {
 }
 ${darkSelector} {
   ${darkThemeCSSRules.join('\n')}
-}
-`;
+}`;
 
   if (useP3Colors) {
     css = `${css}
@@ -144,7 +135,7 @@ ${darkSelector} {
 }`;
   }
 
-  return css;
+  return css.replaceAll('\n\n', '\n').replaceAll('  ', ' ').replaceAll('\n \n', '');
 }
 
 function getColorValue({
@@ -178,16 +169,16 @@ function getColorValue({
   if (p3 === '') {
     // convert Hex values to rgb values
     const color = new Color(value);
-    
+
     if (alpha === 'A') {
-      value = color.toString({ format: 'rgb', precision: 4});
+      value = color.toString({ format: 'rgb', precision: 4 });
       return value; // put it inside var() so unocss can not add opacity to it.
     }
     if (alpha === '') {
       // convert 'rgb(100 40 50)' to '100 40 50' to be used in rgb(  / <alpha-value>)
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
-      value = color.toString({ format: 'rgba', precision: 4});
-      return value.replace('rgba(', '').replace(')', '').trim()
+      value = color.toString({ format: 'rgba', precision: 4 });
+      return value.replace('rgba(', '').replace(')', '').trim();
     }
   }
 }
