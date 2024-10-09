@@ -21,7 +21,6 @@ export default defineConfig({
             },
             safelistAliases: ["testa"],
             safelistColors: RADIX_HUES,
-            extend: 3
           }),
         ],
         // safelist: [
@@ -42,7 +41,8 @@ export default defineConfig({
         items: [
           { text: "Installation & Usage", link: "/usage" },
           { text: "Configuration", link: "/configuration" },
-          { text: "Hue Utility", link: "/hues" },
+          { text: "Alias Utility", link: "/alias-utility" },
+          { text: "Migrating from v2", link: "/migrating-from-v2" },
         ],
       },
       {

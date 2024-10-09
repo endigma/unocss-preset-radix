@@ -42,3 +42,7 @@ The aliases should be present in aliases object.
 
 If you only want to use `dark` or `light` theme, set this to `light` or `dark` respectively. So, CSS variables for other theme is not added to CSS. Default is `undefined`.
 When onlyOneTheme is set to `dark` or `light`, the darkSelector and lightSelector will be ignored and all CSS variables will be added to the :root selector.
+
+### layer
+
+the name of unocss layer that css variables are added to. Default is `radix-colors`.
