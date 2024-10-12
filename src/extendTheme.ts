@@ -7,12 +7,10 @@ export function extendTheme({
   theme,
   prefix,
   extend,
-  useP3Colors = false,
 }: {
   theme: Theme;
   prefix: string;
   extend: boolean;
-  useP3Colors: boolean;
 }) {
   const aliasesInUse = aliasesInUseHelpers.getAliasesInUse();
 
@@ -34,43 +32,9 @@ export function extendTheme({
             colorsOfSameHueInOriginalTheme = theme.colors?.[hueOrAlias];
           }
         }
-
         return [
           hueOrAlias,
-          useP3Colors
-            ? {
-              ...(extend ? colorsOfSameHueInOriginalTheme : {}),
-
-              "fg": `var(--${prefix}-P3-${hueOrAlias}-fg)`,
-              
-              "1": `var(--${prefix}-P3-${hueOrAlias}1)`,
-              "2": `var(--${prefix}-P3-${hueOrAlias}2)`,
-              "3": `var(--${prefix}-P3-${hueOrAlias}3)`,
-              "4": `var(--${prefix}-P3-${hueOrAlias}4)`,
-              "5": `var(--${prefix}-P3-${hueOrAlias}5)`,
-              "6": `var(--${prefix}-P3-${hueOrAlias}6)`,
-              "7": `var(--${prefix}-P3-${hueOrAlias}7)`,
-              "8": `var(--${prefix}-P3-${hueOrAlias}8)`,
-              "9": `var(--${prefix}-P3-${hueOrAlias}9)`,
-              "10": `var(--${prefix}-P3-${hueOrAlias}10)`,
-              "11": `var(--${prefix}-P3-${hueOrAlias}11)`,
-              "12": `var(--${prefix}-P3-${hueOrAlias}12)`,
-
-              // put colors with alpha values inside var(...) so, unocss don't add extra opacity and break it.
-              "1A": `var(--${prefix}-P3-${hueOrAlias}1A)`,
-              "2A": `var(--${prefix}-P3-${hueOrAlias}2A)`,
-              "3A": `var(--${prefix}-P3-${hueOrAlias}3A)`,
-              "4A": `var(--${prefix}-P3-${hueOrAlias}4A)`,
-              "5A": `var(--${prefix}-P3-${hueOrAlias}5A)`,
-              "6A": `var(--${prefix}-P3-${hueOrAlias}6A)`,
-              "7A": `var(--${prefix}-P3-${hueOrAlias}7A)`,
-              "8A": `var(--${prefix}-P3-${hueOrAlias}8A)`,
-              "9A": `var(--${prefix}-P3-${hueOrAlias}9A)`,
-              "10A": `var(--${prefix}-P3-${hueOrAlias}10A)`,
-              "11A": `var(--${prefix}-P3-${hueOrAlias}11A)`,
-              "12A": `var(--${prefix}-P3-${hueOrAlias}12A)`,
-            }
-            : {
+            {
               ...(extend ? colorsOfSameHueInOriginalTheme : {}),
 
               "fg": `var(--${prefix}-${hueOrAlias}-fg)`,

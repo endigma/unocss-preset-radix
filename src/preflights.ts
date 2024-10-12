@@ -56,7 +56,7 @@ export function generateCSSVariablesForColorsInUse({
         );
         if (useP3Colors) {
           cssRules.globalP3.push(
-            `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
           );
         }
       } else {
@@ -68,10 +68,10 @@ export function generateCSSVariablesForColorsInUse({
         );
         if (useP3Colors) {
           cssRules.lightThemeP3.push(
-            `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
           );
           cssRules.darkThemeP3.push(
-            `--${prefix}-P3-${hue}${shade}${alpha}: ${getColorValue({
+            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({
               hue,
               shade,
               alpha,
@@ -90,9 +90,6 @@ export function generateCSSVariablesForColorsInUse({
     if (!hue) continue;
     for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
       cssRules.global.push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
-      if (useP3Colors) {
-        cssRules.globalP3.push(`--${prefix}-P3-${alias}${shadeAlpha}: var(--${prefix}-P3-${hue}${shadeAlpha});`);
-      }
     }
   }
 
@@ -107,9 +104,6 @@ export function generateCSSVariablesForColorsInUse({
       for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
         scopeRules[selector] ??= [];
         scopeRules[selector].push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
-        if (useP3Colors) {
-          scopeRules[selector].push(`--${prefix}-P3-${alias}${shadeAlpha}: var(--${prefix}-P3-${hue}${shadeAlpha});`);
-        }
       }
     }
   }

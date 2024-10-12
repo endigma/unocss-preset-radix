@@ -94,14 +94,11 @@ export function presetRadix<T extends Aliases>({
           if (isValidColor({ hue: hueOrAlias, shade, alpha })) {
             const hue = hueOrAlias as RadixHue | 'white' | 'black';
             colorsInUseHelpers.addColor({ hue, shade, alpha });
-
-            return useP3Colors && shade !== '-fg' ? `with-P3-fallbacks:${token}` : token;
           }
 
           if (isValidAlias({ alias: hueOrAlias, shade, alpha, aliases })) {
             const alias = hueOrAlias;
             aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
-            return useP3Colors && shade !== '-fg' ? `with-P3-fallbacks:${token}` : token;
           }
 
           return token;
@@ -125,7 +122,6 @@ export function presetRadix<T extends Aliases>({
         { layer: 'default' },
       ],
     ],
-    variants: useP3Colors ? [addP3Fallbacks({ prefix })] : undefined,
     preflights: [
       {
         getCSS: (context) => {
@@ -143,7 +139,7 @@ export function presetRadix<T extends Aliases>({
       },
     ],
     extendTheme: (theme: Theme) => {
-      return extendTheme({ theme, prefix, extend, useP3Colors });
+      return extendTheme({ theme, prefix, extend });
     },
   };
 }
