@@ -1,5 +1,4 @@
 import { Alpha, Dark, P3, RadixHue, Shade, ShadeAlpha } from './types';
-import Color from 'colorjs.io';
 import * as radixColors from '@radix-ui/colors';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
 import * as aliasesInUseHelpers from './aliasesInUseHelpers';

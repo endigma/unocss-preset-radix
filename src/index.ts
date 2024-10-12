@@ -3,7 +3,6 @@ import type { Theme } from 'unocss/preset-uno';
 import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Shade } from './types';
 
 import { generateCSSVariablesForColorsInUse } from './preflights';
-import { addP3Fallbacks } from './variants';
 import { extendTheme } from './extendTheme';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
 import * as aliasesInUseHelpers from './aliasesInUseHelpers';
@@ -28,7 +27,7 @@ export function presetRadix<T extends Aliases>({
   safelistAliases: _safelistAliases,
   extend = false,
   onlyOneTheme,
-  layer = 'radix-colors'
+  layer = 'radix-colors',
 }: Options<T>): Preset<Theme> {
   let prefix = isValidPrefix(_prefix) ? _prefix : '--un-preset-radix-';
   // remove hyphens from start and end of prefix.
@@ -65,7 +64,6 @@ export function presetRadix<T extends Aliases>({
   for (const alias in aliases) {
     aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: aliases[alias] });
   }
-
 
   return {
     name: 'unocss-preset-radix',
@@ -122,6 +120,38 @@ export function presetRadix<T extends Aliases>({
         { layer: 'default' },
       ],
     ],
+
+    rules: [
+      // detect usage of radix colors or aliases as css variables and handle it.
+      // examples: var(--un-preset-radix-pink9), var(--un-preset-radix-warning9A ), var(--uno-preset-radix-danger-fg, white)
+      [
+        /^var\(--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?(\)|,)?$/,
+        (match) => {
+          if (!match) return;
+          const [token, matchedPrefix, hueOrAlias, shade, alpha = '', closingBracketOrCamma] = match as [
+            string,
+            string,
+            HueOrAlias,
+            Shade,
+            Alpha,
+            string
+          ];
+          if (matchedPrefix !== prefix) return;
+
+          if (isValidColor({ hue: hueOrAlias, shade, alpha })) {
+            const hue = hueOrAlias as RadixHue | 'white' | 'black';
+            colorsInUseHelpers.addColor({ hue, shade, alpha });
+          }
+
+          if (isValidAlias({ alias: hueOrAlias, shade, alpha, aliases })) {
+            const alias = hueOrAlias;
+            aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+          }
+          return ''
+        },
+        { layer: 'default' },
+      ],
+    ],
     preflights: [
       {
         getCSS: (context) => {
@@ -134,7 +164,7 @@ export function presetRadix<T extends Aliases>({
             onlyOneTheme,
             aliases,
           });
-        },  
+        },
         layer: layer,
       },
     ],
