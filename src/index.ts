@@ -22,9 +22,8 @@ export function presetRadix<T extends Aliases>({
   prefix: _prefix = '--un-preset-radix-',
   darkSelector = '.dark-theme',
   lightSelector = ':root, .light-theme',
-  safelistColors: _safelistColors,
   aliases: _aliases,
-  safelistAliases: _safelistAliases,
+  safelist,
   extend = false,
   onlyOneTheme,
   layer = 'radix-colors',
@@ -34,9 +33,9 @@ export function presetRadix<T extends Aliases>({
   prefix = prefix.replaceAll('-', ' ').trim().replaceAll(' ', '-');
 
   // filter valid user inputs + flatten them (blue -> blue1, blue2, ..., blue12,... , blue12A, blue-fg)
-  const safelistColors = filterValidSafelistColors((_safelistColors ?? []) as string[]);
+  const safelistColors = filterValidSafelistColors((safelist ?? []) as string[]);
   const aliases = filterValidAliases(_aliases ?? {});
-  const safelistAliases = filterValidSafelistAliases((_safelistAliases ?? []) as string[], aliases);
+  const safelistAliases = filterValidSafelistAliases((safelist ?? []) as string[], aliases);
 
   // add safelist colors to colors in use
   for (const safelistColor in safelistColors) {

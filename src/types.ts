@@ -46,7 +46,8 @@ export type SafelistColor =
   | `white-fg`
   | `black-fg`;
 
-type SafeListAlias<T extends string> = T | `${T}${Shade}${Alpha}` | `${T}-fg`;
+type KeyOf<T> = Extract<keyof T, string>; // string key of records.
+type SafeListAlias<T extends Aliases> = KeyOf<T> | `${KeyOf<T>}${Shade}${Alpha}` | `${KeyOf<T>}-fg`;
 
 export interface Options<T extends Aliases> {
   /**
@@ -66,14 +67,12 @@ export interface Options<T extends Aliases> {
   lightSelector?: string;
   /** Add color aliases */
   aliases?: T;
-  /**
-   * Colors to preserve. You can specific color shade (like blue4 or blue5A) or add a color (like blue) to preserve all 12 shades
+ /**
+   * List of Colors or Aliases you want to preserve. You can specific color step (like `blue4` or `blue5A`) or add a color (like blue) to preserve all 12 steps, 12 alpha steps and `fg` step. 
+   * Same for aliases. You can preseve specific step of an alias like `success4`, `success5A`, `success-fg` or add `success` to preserve all 12 steps, all 12 alpha steps and fg preserved). Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
    */
-  safelistColors?: readonly SafelistColor[];
-  /**
-   * Alias to preserve. Each alias will preserve all of its 12 shades.
-   */
-  safelistAliases?: readonly SafeListAlias<Extract<keyof T, string>>[];
+  safelist: Readonly <SafelistColor | SafeListAlias<T>>[];
+
   /**
    * Extend instead of override the default theme
    * @default false
