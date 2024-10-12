@@ -1,4 +1,4 @@
-import { Preset, ResolvedConfig, RuleContext } from 'unocss';
+import { Extractor, Preset, ResolvedConfig, RuleContext } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
 import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Step } from './types';
 
@@ -66,11 +66,13 @@ export function presetRadix<T extends Aliases>({
 
   return {
     name: 'unocss-preset-radix',
-    layers: layer ? {
-      preflights: 1,
-      [layer]: 2,
-      default: 3,
-    } : undefined,
+    layers: layer
+      ? {
+          preflights: 1,
+          [layer]: 2,
+          default: 3,
+        }
+      : undefined,
     shortcuts: [
       // This shortcut exist so generated css for colors to have same order.
       [/^(.*)-(transparent|white|black|current|current-color|inherit)$/, ([token]) => `${token}`, { layer: 'default' }],
@@ -127,7 +129,7 @@ export function presetRadix<T extends Aliases>({
         /^var\(--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?(\)|,)?$/,
         (match, context: RuleContext<Theme>) => {
           if (!match) return;
-          const [token, matchedPrefix, hueOrAlias, step, alpha = '', closingBracketOrComma] = match as [
+          const [token, matchedPrefix, hueOrAlias, step, alpha = '', trailingBracketOrComma] = match as [
             string,
             string,
             HueOrAlias,
@@ -150,10 +152,24 @@ export function presetRadix<T extends Aliases>({
             aliasesInUseHelpers.addStepToAnAlias({ alias, step, alpha });
           }
 
-          return ''
+          return '';
         },
         { layer: 'default' },
       ],
+    ],
+    extractors: [
+      // extracts usage of css variables with radix color format.
+      {
+        name: 'unocss-preset-radix-css-variables-extractor',
+        order: 1,
+        extract({ code }) {
+          const mySplitRE = /var\(\s?--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?[\s\)\,]/g;
+          return code.match(mySplitRE)?.map((item) => {
+            // remove spaces from start and end, remove trailing comma and remove trailing closing bracket so the css rule can catch it
+            return item.replaceAll(' ', '').replace(')', '').replace(',', '');
+          });
+        },
+      },
     ],
     preflights: [
       {
@@ -174,6 +190,5 @@ export function presetRadix<T extends Aliases>({
     extendTheme: (theme: Theme) => {
       return extendTheme({ theme, prefix, extend });
     },
-
   };
 }
