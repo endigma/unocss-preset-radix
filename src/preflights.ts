@@ -123,10 +123,10 @@ ${scopeRules[selector].join('')}
   if (useP3Colors) {
     css = `${css}
 @supports(color: color(display-p3 0 0 1)){:root{${[
-      cssRules.globalP3.join(''),
-      onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('') : undefined,
-      onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('') : undefined,
-    ].join('')}}}`;
+        cssRules.globalP3.join(''),
+        onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('') : undefined,
+        onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('') : undefined,
+      ].join('')}}}`;
   }
 
   css = `${css}
@@ -142,8 +142,7 @@ ${darkSelector} {${cssRules.darkTheme.join('')}}`;
       css = `${css}
 @supports(color: color(display-p3 0 0 1)){${lightSelector} {${cssRules.lightThemeP3.join(
         ''
-      )}} ${darkSelector} {${cssRules.darkThemeP3.join('')}}
-}`;
+      )}} ${darkSelector} {${cssRules.darkThemeP3.join('')}}}`;
     }
   }
 

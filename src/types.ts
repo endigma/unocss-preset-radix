@@ -71,7 +71,7 @@ export interface Options<T extends Aliases> {
    * List of Colors or Aliases you want to preserve. You can specific color step (like `blue4` or `blue5A`) or add a color (like blue) to preserve all 12 steps, 12 alpha steps and `fg` step. 
    * Same for aliases. You can preserve specific step of an alias like `success4`, `success5A`, `success-fg` or add `success` to preserve all 12 steps, all 12 alpha steps and fg preserved). Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
    */
-  safelist: Readonly <SafelistColor | SafeListAlias<T>>[];
+  safelist?: Readonly <SafelistColor | SafeListAlias<T>>[];
 
   /**
    * Extend instead of override the default theme

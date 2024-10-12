@@ -27,10 +27,14 @@ If you change `prefix` option, you will need to change the CSS variables as well
 
 DO NOT put an space between `var(` and `--un-preset-radix-...`. This won't be detected. 
 
+- `var( --un-preset-radix-red9)` ❌ Will not work
 - `var(--un-preset-radix-red9)` ✅ Works
+
+- `var( --un-preset-radix-red9 )` ❌ Will not work
 - `var(--un-preset-radix-red9 )` ✅ Works
-- `var(--un-preset-radix-red9, red)` ✅ Works
 
 - `var(--un-preset-radix-red9,red)` ❌ Will not work
-- `var( --un-preset-radix-red9)` ❌ Will not work
-- `var( --un-preset-radix-red9 )` ❌ Will not work
+- `var(--un-preset-radix-red9, red)` ✅ Works
+
+- `linear-gradient(45deg,var(--un-preset-radix-red9),var(--un-preset-radix-orange9))` ❌ Will not work
+- `linear-gradient(45deg, var(--un-preset-radix-red9) , var(--un-preset-radix-orange9) )`  ✅ Works
