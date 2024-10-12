@@ -1,6 +1,6 @@
-import { Extractor, Preset, ResolvedConfig, RuleContext } from 'unocss';
+import { Preset, RuleContext } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
-import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Step } from './types';
+import { type Options, Aliases, Alpha, HueOrAlias, RadixHue, Step } from './types';
 
 import { generateCSSVariablesForColorsInUse } from './preflights';
 import { extendTheme } from './extendTheme';
@@ -68,10 +68,10 @@ export function presetRadix<T extends Aliases>({
     name: 'unocss-preset-radix',
     layers: layer
       ? {
-          preflights: 1,
-          [layer]: 2,
-          default: 3,
-        }
+        preflights: 1,
+        [layer]: 2,
+        default: 3,
+      }
       : undefined,
     shortcuts: [
       // This shortcut exist so generated css for colors to have same order.

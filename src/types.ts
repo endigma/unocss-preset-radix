@@ -1,5 +1,4 @@
 import { RADIX_HUES } from './consts';
-
 export type Alpha = 'A' | '';
 export type RadixHue = (typeof RADIX_HUES)[number];
 export type Step = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '-fg';

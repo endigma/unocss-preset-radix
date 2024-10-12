@@ -1,5 +1,3 @@
-import { Alpha, P3, Step } from './types';
-
 export const RADIX_HUES = [
   "amber",
   "blue",
@@ -35,6 +33,6 @@ export const RADIX_HUES = [
 ] as const;
 
 
-export const ALPHAS: Alpha[] = ['', 'A'] as const;
-export const P3S: P3[] = ['', 'P3'] as const;
-export const STEPS: Step[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '-fg'] as const;
+export const ALPHAS = ['', 'A']  as const; 
+export const P3S  = ['', 'P3'] as const;
+export const STEPS= ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '-fg'] as const;
