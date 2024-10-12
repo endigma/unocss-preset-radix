@@ -94,7 +94,6 @@ export function generateCSSVariablesForColorsInUse({
 
   const scopeRules = {} as Record<string, string[]>;
 
-
   for (const alias in aliasesInUse) {
     const scopes = aliasesInUse[alias].scopes;
 
@@ -110,30 +109,24 @@ export function generateCSSVariablesForColorsInUse({
   const scopeCss = Object.keys(scopeRules)
     .map((selector) => {
       return `${selector} {
-${scopeRules[selector].join('\n  ')}
+${scopeRules[selector].join('')}
 }`;
     })
-    .join('\n');
+    .join('');
 
-  let css = `:root {
-  ${[
-      cssRules.global.join('\n  '),
-      onlyOneTheme === 'light' ? cssRules.lightTheme.join('\n  ') : undefined,
-      onlyOneTheme === 'dark' ? cssRules.darkTheme.join('\n  ') : undefined,
-    ].join('\n  ')}
-}`;
+  let css = `:root {${[
+    cssRules.global.join(''),
+    onlyOneTheme === 'light' ? cssRules.lightTheme.join('') : undefined,
+    onlyOneTheme === 'dark' ? cssRules.darkTheme.join('') : undefined,
+  ].join('')}}`;
 
   if (useP3Colors) {
     css = `${css}
-@supports(color: color(display-p3 0 0 1)) {
-  :root {
-    ${[
-        cssRules.globalP3.join('\n    '),
-        onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('\n    ') : undefined,
-        onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('\n    ') : undefined,
-      ].join('\n    ')}
-  }
-}`;
+@supports(color: color(display-p3 0 0 1)){:root{${[
+      cssRules.globalP3.join(''),
+      onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('') : undefined,
+      onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('') : undefined,
+    ].join('')}}}`;
   }
 
   css = `${css}
@@ -142,22 +135,14 @@ ${scopeCss}`;
   //  if both light and dark theme exist
   if (!onlyOneTheme) {
     css = `${css}
-${lightSelector} {
-  ${cssRules.lightTheme.join('\n  ')}
-}
-${darkSelector} {
-  ${cssRules.darkTheme.join('\n  ')}
-}`;
+${lightSelector} {${cssRules.lightTheme.join('')}}
+${darkSelector} {${cssRules.darkTheme.join('')}}`;
 
     if (useP3Colors) {
       css = `${css}
-@supports(color: color(display-p3 0 0 1)) {
-  ${lightSelector} {
-    ${cssRules.lightThemeP3.join('\n    ')}
-  }
-  ${darkSelector} {
-    ${cssRules.darkThemeP3.join('\n    ')}
-  }
+@supports(color: color(display-p3 0 0 1)){${lightSelector} {${cssRules.lightThemeP3.join(
+        ''
+      )}} ${darkSelector} {${cssRules.darkThemeP3.join('')}}
 }`;
     }
   }
