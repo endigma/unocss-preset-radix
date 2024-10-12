@@ -98,10 +98,10 @@ export function generateCSSVariablesForColorsInUse({
 
   const scopeRules = {} as Record<string, string[]>;
 
-  
+
   for (const alias in aliasesInUse) {
     const scopes = aliasesInUse[alias].scopes;
-    
+
     for (const selector in scopes) {
       const hue = scopes[selector];
       for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
@@ -117,28 +117,28 @@ export function generateCSSVariablesForColorsInUse({
   const scopeCss = Object.keys(scopeRules)
     .map((selector) => {
       return `${selector} {
-${scopeRules[selector].join('\n')}
+${scopeRules[selector].join('\n  ')}
 }`;
     })
     .join('\n');
 
   let css = `:root {
   ${[
-    cssRules.global.join('\n'),
-    onlyOneTheme === 'light' ? cssRules.lightTheme.join('\n') : undefined,
-    onlyOneTheme === 'dark' ? cssRules.darkTheme.join('\n') : undefined,
-  ].join('\n')}
+      cssRules.global.join('\n  '),
+      onlyOneTheme === 'light' ? cssRules.lightTheme.join('\n  ') : undefined,
+      onlyOneTheme === 'dark' ? cssRules.darkTheme.join('\n  ') : undefined,
+    ].join('\n  ')}
 }`;
 
   if (useP3Colors) {
     css = `${css}
 @supports(color: color(display-p3 0 0 1)) {
   :root {
-  ${[
-    cssRules.globalP3.join('\n'),
-    onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('\n') : undefined,
-    onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('\n') : undefined,
-  ].join('\n')}
+    ${[
+        cssRules.globalP3.join('\n    '),
+        onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('\n    ') : undefined,
+        onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('\n    ') : undefined,
+      ].join('\n    ')}
   }
 }`;
   }
@@ -150,20 +150,20 @@ ${scopeCss}`;
   if (!onlyOneTheme) {
     css = `${css}
 ${lightSelector} {
-  ${cssRules.lightTheme.join('\n')}
+  ${cssRules.lightTheme.join('\n  ')}
 }
 ${darkSelector} {
-  ${cssRules.darkTheme.join('\n')}
+  ${cssRules.darkTheme.join('\n  ')}
 }`;
 
     if (useP3Colors) {
       css = `${css}
 @supports(color: color(display-p3 0 0 1)) {
   ${lightSelector} {
-    ${cssRules.lightThemeP3.join('\n')}
+    ${cssRules.lightThemeP3.join('\n    ')}
   }
   ${darkSelector} {
-    ${cssRules.darkThemeP3.join('\n')}
+    ${cssRules.darkThemeP3.join('\n    ')}
   }
 }`;
     }
@@ -196,23 +196,25 @@ function getColorValue({
     if (alpha === '') {
       // return in p3 format ex: '1 4 5'
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
-      return value.replace('color(display-p3', '').replace(')', '').trim();
+      // return value.replace('color(display-p3', '').replace(')', '').trim();
+      return value;
     }
   }
 
   if (p3 === '') {
     // convert Hex or rgb values to rgb values
-    const color = new Color(value);
+    // const color = new Color(value);
 
     if (alpha === 'A') {
-      value = color.toString({ format: 'rgb', precision: 4 });
+      // value = color.toString({ format: 'rgb', precision: 4 });
       return value; // put it inside var() so unocss can not add opacity to it.
     }
     if (alpha === '') {
       // convert 'rgb(100 40 50)' to '100 40 50' to be used in rgb(  / <alpha-value>)
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
-      value = color.toString({ format: 'rgba', precision: 4 });
-      return value.replace('rgba(', '').replace(')', '').trim();
+      // value = color.toString({ format: 'rgba', precision: 4 });
+      // return value.replace('rgba(', '').replace(')', '').trim();
+      return value;
     }
   }
 }
