@@ -3,19 +3,19 @@ import {
   Alpha,
   // ColorsInUse,
   RadixHue,
-  Shade,
-  ShadeAlpha,
+  Step,
+  StepAlpha,
 } from './types';
 
 type AliasProperties = {
-  shade: Shade;
+  step: Step;
   alpha: Alpha;
 };
 
 type Selector = string;
 
 type AliasInUse = {
-  shadesInUse: Record<ShadeAlpha, AliasProperties>;
+  stepsInUse: Record<StepAlpha, AliasProperties>;
   possibleHues: RadixHue[]
   scopes: Record<Selector, RadixHue>;
 };
@@ -28,21 +28,21 @@ export function getAliasesInUse() {
   return aliasesInUse as Readonly<AliasesInUse>;
 }
 
-export function addShadeToAnAlias({ alias, shade, alpha }: { alias: Alias; shade: Shade; alpha: Alpha }) {
+export function addStepToAnAlias({ alias, step, alpha }: { alias: Alias; step: Step; alpha: Alpha }) {
   aliasesInUse[alias] = aliasesInUse[alias] ?? {};
-  aliasesInUse[alias].shadesInUse = aliasesInUse[alias].shadesInUse ?? {};
+  aliasesInUse[alias].stepsInUse = aliasesInUse[alias].stepsInUse ?? {};
   aliasesInUse[alias].possibleHues = aliasesInUse[alias].possibleHues ?? [];
 
-  aliasesInUse[alias].shadesInUse[`${shade}${alpha}` as ShadeAlpha] = {
-    shade,
+  aliasesInUse[alias].stepsInUse[`${step}${alpha}` as StepAlpha] = {
+    step,
     alpha,
-    // we keep possible hues on aliasesInUse[alias].possibleHues, because each alias can be reassigned (through alias-danger-is-orange utility class) to another hue in diffrenet parts of html
+    // we keep possible hues on aliasesInUse[alias].possibleHues, because each alias can be reassigned (through alias-danger-is-orange utility class) to another hue in different parts of html
   };
 }
 
 export function addPossibleHueToAnAlias({ alias, possibleHue }: { alias: Alias; possibleHue: RadixHue, scope?: string }) {
   aliasesInUse[alias] = aliasesInUse[alias] ?? {};
-  aliasesInUse[alias].shadesInUse = aliasesInUse[alias].shadesInUse ?? {};
+  aliasesInUse[alias].stepsInUse = aliasesInUse[alias].stepsInUse ?? {};
   aliasesInUse[alias].possibleHues = aliasesInUse[alias].possibleHues ?? [];
 
   if (!aliasesInUse[alias].possibleHues.includes(possibleHue)) {

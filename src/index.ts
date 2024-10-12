@@ -1,6 +1,6 @@
 import { Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
-import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Shade } from './types';
+import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Step } from './types';
 
 import { generateCSSVariablesForColorsInUse } from './preflights';
 import { extendTheme } from './extendTheme';
@@ -39,22 +39,22 @@ export function presetRadix<T extends Aliases>({
 
   // add safelist colors to colors in use
   for (const safelistColor in safelistColors) {
-    const { hue, shade, alpha } = safelistColors[safelistColor];
-    colorsInUseHelpers.addColor({ hue, shade, alpha });
+    const { hue, step, alpha } = safelistColors[safelistColor];
+    colorsInUseHelpers.addColor({ hue, step, alpha });
   }
 
   // add safelist aliases to aliaes in use + add respective hue to AliasesInUse
   for (const safelistAlias in safelistAliases) {
-    const { alias, shade, alpha } = safelistAliases[safelistAlias];
+    const { alias, step, alpha } = safelistAliases[safelistAlias];
     const hue = aliases[alias];
 
     aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: hue });
-    aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+    aliasesInUseHelpers.addStepToAnAlias({ alias, step, alpha });
   }
 
   // also add the color right away whether it is used in project or not.
   for (const safelistAlias in safelistAliases) {
-    const { alias, shade, alpha } = safelistAliases[safelistAlias];
+    const { alias, step, alpha } = safelistAliases[safelistAlias];
     // colorsInUseHelpers.addAllPossibleColorsOfAnAlias({ alias });
   }
 
@@ -79,23 +79,23 @@ export function presetRadix<T extends Aliases>({
         /^([a-z]+(-[a-z]+)*)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?$/,
         (match) => {
           if (!match) return;
-          const [token, property, propertyInnerGroup, hueOrAlias, shade, alpha = ''] = match as [
+          const [token, property, propertyInnerGroup, hueOrAlias, step, alpha = ''] = match as [
             string,
             string,
             string,
             HueOrAlias,
-            Shade,
+            Step,
             Alpha
           ];
 
-          if (isValidColor({ hue: hueOrAlias, shade, alpha })) {
+          if (isValidColor({ hue: hueOrAlias, step, alpha })) {
             const hue = hueOrAlias as RadixHue | 'white' | 'black';
-            colorsInUseHelpers.addColor({ hue, shade, alpha });
+            colorsInUseHelpers.addColor({ hue, step, alpha });
           }
 
-          if (isValidAlias({ alias: hueOrAlias, shade, alpha, aliases })) {
+          if (isValidAlias({ alias: hueOrAlias, step, alpha, aliases })) {
             const alias = hueOrAlias;
-            aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+            aliasesInUseHelpers.addStepToAnAlias({ alias, step, alpha });
           }
 
           return token;
@@ -127,24 +127,24 @@ export function presetRadix<T extends Aliases>({
         /^var\(--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?(\)|,)?$/,
         (match) => {
           if (!match) return;
-          const [token, matchedPrefix, hueOrAlias, shade, alpha = '', closingBracketOrCamma] = match as [
+          const [token, matchedPrefix, hueOrAlias, step, alpha = '', closingBracketOrCamma] = match as [
             string,
             string,
             HueOrAlias,
-            Shade,
+            Step,
             Alpha,
             string
           ];
           if (matchedPrefix !== prefix) return;
 
-          if (isValidColor({ hue: hueOrAlias, shade, alpha })) {
+          if (isValidColor({ hue: hueOrAlias, step, alpha })) {
             const hue = hueOrAlias as RadixHue | 'white' | 'black';
-            colorsInUseHelpers.addColor({ hue, shade, alpha });
+            colorsInUseHelpers.addColor({ hue, step, alpha });
           }
 
-          if (isValidAlias({ alias: hueOrAlias, shade, alpha, aliases })) {
+          if (isValidAlias({ alias: hueOrAlias, step, alpha, aliases })) {
             const alias = hueOrAlias;
-            aliasesInUseHelpers.addShadeToAnAlias({ alias, shade, alpha });
+            aliasesInUseHelpers.addStepToAnAlias({ alias, step, alpha });
           }
           return ''
         },

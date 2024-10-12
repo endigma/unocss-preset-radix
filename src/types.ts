@@ -2,8 +2,8 @@ import { RADIX_HUES } from './consts';
 
 export type Alpha = 'A' | '';
 export type RadixHue = (typeof RADIX_HUES)[number];
-export type Shade = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '-fg';
-export type ShadeAlpha =
+export type Step = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '-fg';
+export type StepAlpha =
   | '1'
   | '2'
   | '3'
@@ -38,16 +38,16 @@ export type Aliases = Record<Alias, RadixHue>;
 
 export type SafelistColor =
   | RadixHue
-  | `${RadixHue}${ShadeAlpha}`
+  | `${RadixHue}${StepAlpha}`
   | 'black'
   | 'white'
-  | `black${Shade}A`
-  | `white${Shade}A`
+  | `black${Step}A`
+  | `white${Step}A`
   | `white-fg`
   | `black-fg`;
 
 type KeyOf<T> = Extract<keyof T, string>; // string key of records.
-type SafeListAlias<T extends Aliases> = KeyOf<T> | `${KeyOf<T>}${Shade}${Alpha}` | `${KeyOf<T>}-fg`;
+type SafeListAlias<T extends Aliases> = KeyOf<T> | `${KeyOf<T>}${Step}${Alpha}` | `${KeyOf<T>}-fg`;
 
 export interface Options<T extends Aliases> {
   /**
@@ -69,7 +69,7 @@ export interface Options<T extends Aliases> {
   aliases?: T;
  /**
    * List of Colors or Aliases you want to preserve. You can specific color step (like `blue4` or `blue5A`) or add a color (like blue) to preserve all 12 steps, 12 alpha steps and `fg` step. 
-   * Same for aliases. You can preseve specific step of an alias like `success4`, `success5A`, `success-fg` or add `success` to preserve all 12 steps, all 12 alpha steps and fg preserved). Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
+   * Same for aliases. You can preserve specific step of an alias like `success4`, `success5A`, `success-fg` or add `success` to preserve all 12 steps, all 12 alpha steps and fg preserved). Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
    */
   safelist: Readonly <SafelistColor | SafeListAlias<T>>[];
 

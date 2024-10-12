@@ -1,4 +1,4 @@
-import { Alpha, Dark, P3, RadixHue, Shade, ShadeAlpha } from './types';
+import { Alpha, Dark, P3, RadixHue, Step, StepAlpha } from './types';
 import * as radixColors from '@radix-ui/colors';
 import * as colorsInUseHelpers from './colorsInUseHelpers';
 import * as aliasesInUseHelpers from './aliasesInUseHelpers';
@@ -23,12 +23,12 @@ export function generateCSSVariablesForColorsInUse({
 }: Props): string {
   const aliasesInUse = aliasesInUseHelpers.getAliasesInUse();
 
-  // for all aliase-shade-alpha used, add corresponding colors (or possible colors) to colorsInuse
+  // for all alias-step-alpha used, add corresponding colors (or possible colors) to colorsInuse
   for (const alias in aliasesInUse) {
     for (const possibleHue of aliasesInUse[alias].possibleHues) {
-      for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
-        const { alpha, shade } = aliasesInUse[alias].shadesInUse[shadeAlpha as ShadeAlpha];
-        colorsInUseHelpers.addColor({ hue: possibleHue, shade, alpha });
+      for (const stepAlpha in aliasesInUse[alias].stepsInUse) {
+        const { alpha, step } = aliasesInUse[alias].stepsInUse[stepAlpha as StepAlpha];
+        colorsInUseHelpers.addColor({ hue: possibleHue, step, alpha });
       }
     }
   }
@@ -45,34 +45,34 @@ export function generateCSSVariablesForColorsInUse({
   const colorsInUse = colorsInUseHelpers.getColorsInUse();
 
   for (const _hue in colorsInUse) {
-    for (const shadeAlpha in colorsInUse[_hue as RadixHue | 'black' | 'white'].shadesInUse) {
-      const { hue, shade, alpha } =
-        colorsInUse[_hue as RadixHue | 'black' | 'white'].shadesInUse[shadeAlpha as ShadeAlpha];
+    for (const stepAlpha in colorsInUse[_hue as RadixHue | 'black' | 'white'].stepsInUse) {
+      const { hue, step, alpha } =
+        colorsInUse[_hue as RadixHue | 'black' | 'white'].stepsInUse[stepAlpha as StepAlpha];
 
-      if (['black', 'white'].includes(hue) || shade === '-fg') {
+      if (['black', 'white'].includes(hue) || step === '-fg') {
         cssRules.global.push(
-          `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: '' })};`
         );
         if (useP3Colors) {
           cssRules.globalP3.push(
-            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: 'P3' })};`
           );
         }
       } else {
         cssRules.lightTheme.push(
-          `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: '' })};`
         );
         cssRules.darkTheme.push(
-          `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: 'Dark', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: 'Dark', p3: '' })};`
         );
         if (useP3Colors) {
           cssRules.lightThemeP3.push(
-            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({ hue, shade, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: 'P3' })};`
           );
           cssRules.darkThemeP3.push(
-            `--${prefix}-${hue}${shade}${alpha}: ${getColorValue({
+            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({
               hue,
-              shade,
+              step,
               alpha,
               dark: 'Dark',
               p3: 'P3',
@@ -85,10 +85,10 @@ export function generateCSSVariablesForColorsInUse({
 
   for (const alias in aliasesInUse) {
     const hue = aliases[alias];
-    // for hues that are not defined in the aliases (defiend via dynamic aliasing), skip.
+    // for hues that are not defined in the aliases (defined via dynamic aliasing), skip.
     if (!hue) continue;
-    for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
-      cssRules.global.push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
+    for (const stepAlpha in aliasesInUse[alias].stepsInUse) {
+      cssRules.global.push(`--${prefix}-${alias}${stepAlpha}: var(--${prefix}-${hue}${stepAlpha});`);
     }
   }
 
@@ -99,9 +99,9 @@ export function generateCSSVariablesForColorsInUse({
 
     for (const selector in scopes) {
       const hue = scopes[selector];
-      for (const shadeAlpha in aliasesInUse[alias].shadesInUse) {
+      for (const stepAlpha in aliasesInUse[alias].stepsInUse) {
         scopeRules[selector] ??= [];
-        scopeRules[selector].push(`--${prefix}-${alias}${shadeAlpha}: var(--${prefix}-${hue}${shadeAlpha});`);
+        scopeRules[selector].push(`--${prefix}-${alias}${stepAlpha}: var(--${prefix}-${hue}${stepAlpha});`);
       }
     }
   }
@@ -153,21 +153,21 @@ ${darkSelector} {${cssRules.darkTheme.join('')}}`;
 function getColorValue({
   hue,
   dark = '',
-  shade,
+  step,
   alpha = '',
   p3 = '',
 }: {
   alpha?: Alpha;
   hue: RadixHue | 'black' | 'white';
   dark?: Dark;
-  shade: Shade;
+  step: Step;
   p3?: P3;
 }) {
-  if (shade === '-fg') return fg(hue);
+  if (step === '-fg') return fg(hue);
 
   let value = '';
   //@ts-ignore
-  value = radixColors[`${hue}${dark}${p3}${alpha}`][`${hue}${alpha}${shade}`];
+  value = radixColors[`${hue}${dark}${p3}${alpha}`][`${hue}${alpha}${step}`];
 
   if (p3 === 'P3') {
     if (alpha === 'A') return value;

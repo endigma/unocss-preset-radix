@@ -1,19 +1,19 @@
 import {
   Alpha,
   RadixHue,
-  Shade,
-  ShadeAlpha,
+  Step,
+  StepAlpha,
 } from './types';
 
 export type ColorProperties = {
-  shade: Shade;
+  step: Step;
   alpha: Alpha;
   hue: RadixHue | 'black' | 'white';
 };
 
 
 export type ColorInUse = {
-  shadesInUse: Record<ShadeAlpha, ColorProperties>;
+  stepsInUse: Record<StepAlpha, ColorProperties>;
 };
 
 export type ColorsInUse = Record<RadixHue | 'black' | 'white', ColorInUse>;
@@ -29,8 +29,8 @@ export function getColorsInUse() {
 
 
 
-export function addColor({ hue, shade, alpha }: { hue: RadixHue | 'black' | 'white'; shade: Shade; alpha: Alpha }) {
+export function addColor({ hue, step, alpha }: { hue: RadixHue | 'black' | 'white'; step: Step; alpha: Alpha }) {
   colorsInUse[hue] = colorsInUse[hue] ?? {};
-  colorsInUse[hue].shadesInUse = colorsInUse[hue].shadesInUse ?? {};
-  colorsInUse[hue].shadesInUse[`${shade}${alpha}` as ShadeAlpha] = { hue, shade, alpha };
+  colorsInUse[hue].stepsInUse = colorsInUse[hue].stepsInUse ?? {};
+  colorsInUse[hue].stepsInUse[`${step}${alpha}` as StepAlpha] = { hue, step, alpha };
 }

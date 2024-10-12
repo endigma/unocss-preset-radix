@@ -35,6 +35,6 @@ You can opt to add only light colors (or only dark colors) to the CSS, bya onlyO
 
 You can use `fg` on colors as well as aliases, like `bg-blue-fg` or `alias-blue-fg`.
 
-In safelistColors option, you can safelist all shades of a color `blue` or specific shades like `blue4`, `blue5A`, `blue-fg`.
+In safelistColors option, you can safelist all steps of a color `blue` or specific steps like `blue4`, `blue5A`, `blue-fg`.
 
-In safelistAliases option, you can safelist all shades of an alias `danger` or specific shades like `danger4`, `danger5A`, `danger-fg`. Make sure you have defined the alias in aliases option.
+In safelistAliases option, you can safelist all steps of an alias `danger` or specific steps like `danger4`, `danger5A`, `danger-fg`. Make sure you have defined the alias in aliases option.

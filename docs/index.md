@@ -20,7 +20,7 @@ features:
     details: Use P3 colors with sRGB fallbacks. 
 
   - title: Foregrounds
-    details: The optimized foreground colors are available as `-fg` shades. For example text-blue-fg for white text-amber-fg for white. These colors are based on the Radix docs. This also works with hues and aliases.
+    details: The optimized foreground colors are available as `-fg` steps. For example text-blue-fg for white text-amber-fg for white. These colors are based on the Radix docs. This also works with hues and aliases.
   - title: Alias Utility
     details: Define aliases in your code. Like `alias-danger-red` and then use it like `bg-danger4` or `bg-danger5A`.
   - title: detect usage as CSS variables

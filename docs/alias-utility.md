@@ -29,4 +29,4 @@ You can reset an alias name multiple times. For example:
 
 Also, using this utility, you can reset an alias set in config to a different hue.
 
-If you need to safelist specific shades or all shades of an alias, use safelistAliases option in config.
+If you need to safelist specific steps or all steps of an alias, use safelistAliases option in config.
