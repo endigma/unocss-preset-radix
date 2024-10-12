@@ -59,35 +59,30 @@ Which will render as:
 The colors automatically support dark mode, so you can use:
 
 ```html
-<div class="p-4 bg-gray1 text-gray12">Text on gray background</div>
+<div class="p-4 bg-pink3 text-pink12">Text on gray background</div>
 ```
 
 Which will render as:
 
-<div class="p-4 bg-gray1 text-gray12">Text on gray background</div>
+<div class="p-4 bg-pink3 text-pink12">Text on gray background</div>
 
 You can switch the docs theme in the ... menu in the top right corner of the page.
 
+::: info
+You don't need to add @dark:bg-red9 or anything for dark mode. When `darkSelector` is applied to a scope colors are switched to dark mode.
+:::
+
 ## Usage in CSS Variables
 
-You can use css variables (like `var(--un-preset-radix-red9)`, `var(--un-preset-radix-red9 , red)`) in your project and the preset detects it and add corresponding colors.
+You can use css variables like `var(--un-preset-radix-red9)`, `var(--un-preset-radix-red9 , red)` in your project and it adds the corresponding colors.
 
-```html
-<div style="background-color: var(--un-preset-radix-gray1); color: var(--un-preset-radix-gray12, 'darkgray')">Text on gray background</div>
-```
-If you use this in CSS files, make sure UnoCSS the CSS files.
+See [Usage in CSS variables](/v3/usage-in-css-variables) for more information.
 
-If you change prefix in the settings, you will need to change the CSS variables as well. For example, if you set prefix to `my-prefix`, you will need to change the CSS variables to `var(--my-prefix-red9)`, `var(--my-prefix-red9 , red)`.
+## Alias Utility 
 
-DO NOT put an space between `var(` and `--un-preset-radix-`. This won't be detected. 
+You can reset an alias to a different hue by using the utility `alias-{aliasName}-{hue}` like `alias-accent-violet`.
 
-`var(--un-preset-radix-red9)` ✅ Works
-`var(--un-preset-radix-red9, red)` ✅ Works
-`var(--un-preset-radix-red9 )` ✅ Works
-
-`var(--un-preset-radix-red9,red)` ❌ Will not work
-`var( --un-preset-radix-red9)` ❌ Will not work
-`var( --un-preset-radix-red9 )` ❌ Will not work
+See [Alias Utility](/v3/alias-utility) for more information.
 
 ## Advanced Configuration
 
@@ -113,13 +108,18 @@ export default defineConfig({
         'blue4', // only adds blue4 whether it is used in your project or not.
         'green3A', // only adds green4A.
         'white7A', // only adds white7A.
-        'primary', // adds primary1, primary2, ..., primary12 and primary1A, primary2A, ..., primary12A whether they are used in your project or not.
+        'primary', /* adds primary1, primary2, ..., primary12
+          and primary1A, primary2A, ..., primary12A 
+          whether they are used in your project or not. */
       ],
-      prefix: 'my-prefix', // CSS variables will be generated with this prefix
-      darkSelector: '.dark-theme', // CSS variables for dark colors will be applied to this selector
-      lightSelector: ':root .light-theme', // CSS variables for light colors will be applied to this selector
+      prefix: 'my-prefix', /* CSS variables will 
+      be generated with this prefix  */
+      darkSelector: '.dark-theme',  /* CSS variables for dark colors 
+      will be applied to this selector */
+      lightSelector: ':root .light-theme', /* CSS variables for light colors 
+      will be applied to this selector */
       useP3Colors: true, // use P3 colors with sRGB fallbacks
-      extend: true, // extend instead of override the default theme
+      extend: true, // extends the defaults theme instead of overriding it
       onlyOneTheme: 'dark', /* if your project has only dark theme, 
       set it here so CSS variables for other theme is not added to CSS.
       If this option is present, darkSelector and lightSelector will be ignored 

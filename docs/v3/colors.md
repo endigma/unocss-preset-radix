@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { RADIX_HUES } from "../src/consts";
+import { RADIX_HUES } from "../../src/consts";
 </script>
 
 # Colors

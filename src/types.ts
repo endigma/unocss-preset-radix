@@ -85,11 +85,12 @@ export interface Options<T extends Aliases> {
   useP3Colors?: boolean;
   /**
    * If your project has only one theme, set it here so CSS variables for other theme is not added to CSS.
+   * @default undefined
    */
   onlyOneTheme?: 'dark' | 'light';
   /**
    * name of unocss layer to add generated css variables to
-   * @default "radix-colors"
+   * @default undefined
    */
   layer?: string;
 }

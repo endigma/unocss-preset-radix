@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Installation & Usage
-      link: /usage
+      link: /v3/usage
     - theme: alt
       text: Colors Showcase
-      link: /colors
+      link: /v3/colors
 
 features:
   - title: Alphas

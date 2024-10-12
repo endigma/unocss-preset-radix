@@ -1,4 +1,4 @@
-import { Preset } from 'unocss';
+import { Preset, ResolvedConfig, RuleContext } from 'unocss';
 import type { Theme } from 'unocss/preset-uno';
 import { type Options, Aliases, Alpha, HueOrAlias, Property, RadixHue, Step } from './types';
 
@@ -26,7 +26,7 @@ export function presetRadix<T extends Aliases>({
   safelist,
   extend = false,
   onlyOneTheme,
-  layer = 'radix-colors',
+  layer,
 }: Options<T>): Preset<Theme> {
   let prefix = isValidPrefix(_prefix) ? _prefix : '--un-preset-radix-';
   // remove hyphens from start and end of prefix.
@@ -43,7 +43,7 @@ export function presetRadix<T extends Aliases>({
     colorsInUseHelpers.addColor({ hue, step, alpha });
   }
 
-  // add safelist aliases to aliaes in use + add respective hue to AliasesInUse
+  // add safelist aliases to aliases in use + add respective hue to AliasesInUse
   for (const safelistAlias in safelistAliases) {
     const { alias, step, alpha } = safelistAliases[safelistAlias];
     const hue = aliases[alias];
@@ -58,21 +58,21 @@ export function presetRadix<T extends Aliases>({
     // colorsInUseHelpers.addAllPossibleColorsOfAnAlias({ alias });
   }
 
-  // add a possible hue for other aliase
-  // don't add any color right away. Colors are added when aliase usage is detected
+  // add a possible hue for other alias
+  // don't add any color right away. Colors are added when alias usage is detected
   for (const alias in aliases) {
     aliasesInUseHelpers.addPossibleHueToAnAlias({ alias, possibleHue: aliases[alias] });
   }
 
   return {
     name: 'unocss-preset-radix',
-    layers: {
+    layers: layer ? {
       preflights: 1,
       [layer]: 2,
       default: 3,
-    },
+    } : undefined,
     shortcuts: [
-      // This shortcut exsit so generated css for colors to have same order.
+      // This shortcut exist so generated css for colors to have same order.
       [/^(.*)-(transparent|white|black|current|current-color|inherit)$/, ([token]) => `${token}`, { layer: 'default' }],
       // Detect usage of radix colors or aliases and handle it (by adding to colors in use). Preflight will generate css variables for based off colorsInUse and aliasesInUse.
       [
@@ -125,9 +125,9 @@ export function presetRadix<T extends Aliases>({
       // examples: var(--un-preset-radix-pink9), var(--un-preset-radix-warning9A ), var(--uno-preset-radix-danger-fg, white)
       [
         /^var\(--([A-Za-z0-9\-\_]+)-([a-z]+)(1|2|3|4|5|6|7|8|9|10|11|12|-fg)(A)?(\)|,)?$/,
-        (match) => {
+        (match, context: RuleContext<Theme>) => {
           if (!match) return;
-          const [token, matchedPrefix, hueOrAlias, step, alpha = '', closingBracketOrCamma] = match as [
+          const [token, matchedPrefix, hueOrAlias, step, alpha = '', closingBracketOrComma] = match as [
             string,
             string,
             HueOrAlias,
@@ -144,8 +144,12 @@ export function presetRadix<T extends Aliases>({
 
           if (isValidAlias({ alias: hueOrAlias, step, alpha, aliases })) {
             const alias = hueOrAlias;
+            if (!(alias in aliases)) {
+              context.theme.colors = { ...context.theme.colors, 'my-color': 'red' };
+            }
             aliasesInUseHelpers.addStepToAnAlias({ alias, step, alpha });
           }
+
           return ''
         },
         { layer: 'default' },
@@ -170,5 +174,6 @@ export function presetRadix<T extends Aliases>({
     extendTheme: (theme: Theme) => {
       return extendTheme({ theme, prefix, extend });
     },
+
   };
 }

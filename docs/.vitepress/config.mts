@@ -16,10 +16,11 @@ export default defineConfig({
           presetRadix({
             darkSelector: ".dark",
             aliases: {
-              testa: "red",
-              testb: "amber",
+              danger: "red",
+              warning: "amber",
+              accent: 'blue'
             },
-            safelist: [...RADIX_HUES , "testa", "testb3","testb5A" , "testb-fg"],
+            safelist: [...RADIX_HUES, "danger", "warning3", "warning5A", "warning-fg"],
           }),
         ],
       }),
@@ -32,15 +33,16 @@ export default defineConfig({
       {
         text: "Guides",
         items: [
-          { text: "Installation & Usage", link: "/usage" },
-          { text: "Configuration", link: "/configuration" },
-          { text: "Alias Utility", link: "/alias-utility" },
-          { text: "Migrating from v2", link: "/migrating-from-v2" },
+          { text: "Installation & Usage", link: "/v3/usage" },
+          { text: "Configuration", link: "/v3/configuration" },
+          { text: "Alias Utility", link: "/v3/alias-utility" },
+          { text: "Usage in CSS Variables", link: "/v3/usage-in-css-variables" },
+          { text: "Migrating from v2", link: "/v3/migrating-from-v2" },
         ],
       },
       {
         text: "Other",
-        items: [{ text: "Colors", link: "/colors" }],
+        items: [{ text: "Colors", link: "/v3/colors" }],
       },
     ],
 

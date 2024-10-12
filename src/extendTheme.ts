@@ -24,6 +24,7 @@ export function extendTheme({
 
     ...Object.fromEntries(
       [...RADIX_HUES, ...Object.keys(aliasesInUse)].map((hueOrAlias) => {
+
         let colorsOfSameHueInOriginalTheme = {};
         if (theme.colors?.[hueOrAlias]) {
           if (typeof theme.colors?.[hueOrAlias] === "string") {
@@ -32,6 +33,7 @@ export function extendTheme({
             colorsOfSameHueInOriginalTheme = theme.colors?.[hueOrAlias];
           }
         }
+        
         return [
           hueOrAlias,
             {
