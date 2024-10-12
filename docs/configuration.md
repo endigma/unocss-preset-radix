@@ -12,31 +12,40 @@ The selector used for dark mode palette. Default is `.dark-theme`.
 
 The selector used for dark mode palette. Default is `:root, .light-theme`.
 
-### aliases
-
-A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette.
-You cannot set aliases to other aliases.
-You cannot set aliases to `black` or `white`.
-The Alias name can not be a Radix Hue names.
-Alpha variants for aliases are generated automatically, so for then given alias `brand: blue`, an alias `brandA: blueA` will also be generated.
-
-### extend
-
-A boolean that sets whether or not the preset will completely overwrite or merge with the previous palette. Default is `false`.
-
 ### useP3Colors 
 
 A boolean that sets whether or not to use the P3 colors. Default is `false`. 
 Note when using P3 colors, rgb colors are also added as fallbacks.
 
-### safelistColors
+### aliases
 
-An array of the Radix UI Colors or Specific shades of a color you'd like to safelist. Dark mode and alpha variants are automatically.
+A key value object of color aliases in the format `alias: target` that allows you to set aliases for the color palette.
 
-### safelistAliases
+Alias name must contain only lowercases letter (`a` to `z`) and hyphens (`-`).
 
-An array of the Aliases you'd like to safelist. All 12 shades will be added automatically. Dark mode and alpha variants are automatically.
-The aliases should be present in aliases object.
+You cannot set aliases to other aliases.
+
+You cannot set aliases to `black` or `white`.
+
+The Alias name can not be a Radix Hue names.
+
+Alpha steps and `fg` are generated automatically, so if you have alias `brand: blue`, you can use `bg-brand2A` and `c-brand-fg`.
+
+### safelist
+
+An array of Colors or aliases you want to preserve. This is useful when you insert classes on runtime (ex from user input or over network).
+
+example: `safelist: ['blue4', 'red5A', 'amber-fg', 'green', 'danger4A', 'base-fg', 'success']`
+
+You can preserve an specific steps of a hue. Like `blue4`, `red5A`, `amber-fg`, etc.
+You can preserve an all steps (12 steps + 12 alpha steps + `fg` step) of a hue. Like `blue`, `red`, `amber`, etc.
+You can preserve an specific steps of an alias. Like `success4`, `warning5A`, `base-fg`, etc.
+You can preserve an all steps of an alias (12 steps + 12 alpha steps + `fg` step). Like `success`, `warning`, `base`, etc.
+
+Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
+
+Dark mode and alpha variants are automatically.
+
 
 ### onlyOneTheme
 
@@ -46,3 +55,7 @@ When onlyOneTheme is set to `dark` or `light`, the darkSelector and lightSelecto
 ### layer
 
 the name of unocss layer that css variables are added to. Default is `radix-colors`.
+
+### extend
+
+A boolean that sets whether or not the preset will completely overwrite or merge with the previous palette. Default is `false`.

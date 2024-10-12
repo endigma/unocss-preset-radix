@@ -7,7 +7,7 @@ With any scale included in your palette, you can use the utility `alias-{aliasNa
 <div class="bg-red4"></div>
 ```
 
-are equivilant.
+are equivalent.
 
 Alias name can not be a radix hue, white, or black.
 
@@ -27,6 +27,6 @@ You can reset an alias name multiple times. For example:
 </div>
 ```
 
-Also, using this utiltiy, you can reset an alias set in config to a different hue.
+Also, using this utility, you can reset an alias set in config to a different hue.
 
-If you need to safelist spacific shades or all shades of an alias, use safelistAliases option in config.
+If you need to safelist specific shades or all shades of an alias, use safelistAliases option in config.

@@ -2,9 +2,9 @@
 
 ## Breaking changes
 
-- V3 uses Radix Colors V3 under the hood. Radix Colors are changed slightly in V3. Please note in V3, step 6,7 and 8 are used for borders. (in Radix Colors v2 steps 5,6 and 7 are used for borders). Please visit [Radix Docs](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale) for more information.
+- V3 uses Radix Colors V3 under the hood. Radix Colors are changed slightly in V3. Please note in V3, step 6, 7 and 8 are used for borders. (Steps 5,6 and 7 were used for borders in Radix Colors V2). Please visit [Radix Docs](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale) for more information.
 
-- `palette` option is removed. You don't need to specify palette colors anymore. Colors are added autoamtically. This version adds the minimum required CSS variables to keep the CSS optimised. But if you need to safelist colors, use `safelistColors` option instead. Also, if you need to safelist aliases, use `safelistAliases` option instead.
+- `palette` option is removed. You don't need to specify palette colors anymore. Colors are added automatically and only the minimum required CSS variables are added to keep the CSS optimized. But if you need to safelist colors or aliases, use `safelist` option instead. Learn more about safelist option in [Configuration docs](/unocss-preset-radix/configuration) section.
 
 - `hue` utility is removed in favor of more flexible Alias Utility. You can replace `hue-red` and `bg-hue4` with `alias-hue-red` and use`bg-hue4`. You can use any other aliases instead of `hue`. With Alias Utility you can define multiple aliases in one scope (while with hue you are stick to one alias). For example:
 
@@ -21,13 +21,15 @@
 </ul>
 ```
 
-This feature is very usefull for creating reusable components. You can use aliases to define what color steps (`bg-base3`, `text-base11`, `b-accent6`) each element has and pass `alias-base-slate` or `alias-accent-pink` as props to your component. This way, the color hue is no longer hardcoded in your component defenition, but decoupled from it.
+This feature is very useful for creating reusable components. You can use aliases to define what color steps (`bg-base3`, `text-base11`, `b-accent6`) each element has and pass `alias-base-slate` or `alias-accent-pink` as props to your component. This way, the color hue is no longer hardcoded in your component definition, but decoupled from it.
 
 ## Other new features
 
 You can use P3 colors with sRGB fallbacks. Set useP3Colors option to true to enable it.
 
 You can set the unocss layer you want to add generated css variables to, via layer option.
+
+You can use css variables (like `var(--un-preset-radix-red9)`, `var(--un-preset-radix-red9 , red)`) in your project and the preset detects it and add corresponding colors. If you use this in css files, make sure UnoCSS the css files.
 
 You can opt to add only light colors (or only dark colors) to the CSS, bya onlyOneTheme option to `light` (or `dark`).
 
