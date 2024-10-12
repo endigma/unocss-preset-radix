@@ -35,7 +35,7 @@ export default defineConfig({
       // useP3Colors: true,
       // onlyOneTheme: 'dark',
       // safelistAliases: ['warning', 'danger4A'],
-      // safelistColors: ['pink3A', 'white11A', 'blue']
+      safelist: ['pink3A', 'white11A', 'blue' , 'warning', 'danger4A'],
     }),
   ],
 });
