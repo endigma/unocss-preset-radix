@@ -19,22 +19,15 @@ export default defineConfig({
               testa: "red",
               testb: "amber",
             },
-            safelistAliases: ["testa"],
-            safelistColors: RADIX_HUES,
+            safelist: [...RADIX_HUES , "testa", "testb3","testb5A" , "testb-fg"],
           }),
         ],
-        // safelist: [
-        //   ...radixColors.map((p) => `hue-${p}`),
-        //   ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}`),
-        //   ...Array.from({ length: 12 }, (_, i) => `bg-hue${i + 1}A`),
-        // ],
       }),
     ],
   },
   description: "A unocss preset for radix colors",
   themeConfig: {
     nav: [{ text: "Home", link: "/" }],
-
     sidebar: [
       {
         text: "Guides",
