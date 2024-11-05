@@ -6,7 +6,7 @@
 
 - `palette` option is removed. You don't need to specify palette colors anymore. Colors are added automatically and only the minimum required CSS variables are added to keep the CSS optimized. But if you need to safelist colors or aliases, use `safelist` option instead. Learn more about safelist option in [Configuration docs](/v3/configuration#safelist) section.
 
-- `hue` utility is removed in favor of more flexible Alias Utility. You can replace `hue-red` and `bg-hue4` with `alias-hue-red` and use`bg-hue4`. You can use any other aliases instead of `hue`.
+- `hue` utility is removed in favor of more flexible Alias Utility. You can replace `hue-red` and `bg-hue4` with `alias-hue-red` and use `bg-hue4`. You can use any other aliases instead of `hue`.
 
 Alias name must be one of aliases defined in [`aliases` option](/v2/configuration#aliases), otherwise it won't work.
 
