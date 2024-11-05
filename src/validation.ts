@@ -16,8 +16,7 @@ export function isValidAliasName(aliasName: string) {
 }
 
 export function isValidRadixHue(hue: string) {
-  // @ts-ignore
-  return RADIX_HUES.includes(hue);
+  return RADIX_HUES.some(h => h === hue);
 }
 
 export function isValidColor({ hue, step, alpha }: { hue: string; step: Step; alpha: Alpha }) {
