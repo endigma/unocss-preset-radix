@@ -25,12 +25,35 @@ export default defineConfig({
           }),
         ],
         safelist: [
-          ...["", "A"]
-            .map((alpha) =>
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((step) => RADIX_HUES.map((hue) => `bg-${hue}${step}${alpha}`))
-            )
-            .flat()
-            .flat(),
+          ...RADIX_HUES.flatMap((hue) => {
+            return [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "1A",
+              "2A",
+              "3A",
+              "4A",
+              "5A",
+              "6A",
+              "7A",
+              "8A",
+              "9A",
+              "10A",
+              "11A",
+              "12A",
+              "-fg",
+            ].map((stepAlpha) => `bg-${hue}${stepAlpha}`);
+          }),
           ...RADIX_HUES.map((h) => [`text-${h}9`, `text-${h}-fg`, `text-${h}12`, `text-${h}1`]).flat(),
         ],
       }),
