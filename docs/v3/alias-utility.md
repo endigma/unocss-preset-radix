@@ -5,9 +5,10 @@ With any scale included in your palette, you can reset aliases to a new hue by u
 ```html
 <button class="px-4 py-2 rd-2 alias-accent-violet bg-accent4">Button</button>
 ```
-Which renders as: 
 
- <button class="px-4 py-2 rd-2 alias-accent-violet bg-accent4 bg-my-color">Button</button>
+Which renders as:
+
+<button class="px-4 py-2 rd-2 alias-accent-violet bg-accent4 bg-my-color">Button</button>
 
 ::: warning
 Note alias name must be one of aliases defined in [`aliases` option](/v2/configuration#aliases), otherwise it won't work.

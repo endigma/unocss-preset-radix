@@ -10,7 +10,7 @@
 
 Alias name must be one of aliases defined in [`aliases` option](/v2/configuration#aliases), otherwise it won't work.
 
- With Alias Utility you can use (and reset) multiple aliases in one scope (while with hue you are stick to one alias). For example:
+With Alias Utility you can use (and reset) multiple aliases in one scope (while with hue you are stick to one alias). For example:
 
 ```html
 <ul>
@@ -31,11 +31,10 @@ This feature is very useful for creating reusable components. You can use aliase
 
 - You can use P3 colors with sRGB fallbacks. Set useP3Colors option to true to enable it.
 
- - You can set the unocss layer you want to add generated css variables to, via layer option.
+- You can set the unocss layer you want to add generated css variables to, via layer option.
 
 - You can use css variables (like `var(--un-preset-radix-red9)`, `var( --un-preset-radix-red9, red)`) in your project and the preset detects it and add corresponding colors. See [Usage in CSS variables](/v3/usage#usage-in-css-variables) for more information.
 
 - You can opt to add only light colors (or only dark colors) to the CSS, bya onlyOneTheme option to `light` (or `dark`).
 
 - If you need to safelist colors or aliases you can do it via `safelist` option in aliases. See [safelist option](/v3/configuration#safelist) for more information.
-

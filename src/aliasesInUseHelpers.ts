@@ -5,7 +5,7 @@ import {
   RadixHue,
   Step,
   StepAlpha,
-} from './types';
+} from "./types";
 
 type AliasProperties = {
   step: Step;
@@ -16,7 +16,7 @@ type Selector = string;
 
 type AliasInUse = {
   stepsInUse: Record<StepAlpha, AliasProperties>;
-  possibleHues: RadixHue[]
+  possibleHues: RadixHue[];
   scopes: Record<Selector, RadixHue>;
 };
 
@@ -40,7 +40,14 @@ export function addStepToAnAlias({ alias, step, alpha }: { alias: Alias; step: S
   };
 }
 
-export function addPossibleHueToAnAlias({ alias, possibleHue }: { alias: Alias; possibleHue: RadixHue, scope?: string }) {
+export function addPossibleHueToAnAlias({
+  alias,
+  possibleHue,
+}: {
+  alias: Alias;
+  possibleHue: RadixHue;
+  scope?: string;
+}) {
   aliasesInUse[alias] = aliasesInUse[alias] ?? {};
   aliasesInUse[alias].stepsInUse = aliasesInUse[alias].stepsInUse ?? {};
   aliasesInUse[alias].possibleHues = aliasesInUse[alias].possibleHues ?? [];
@@ -50,11 +57,10 @@ export function addPossibleHueToAnAlias({ alias, possibleHue }: { alias: Alias; 
   }
 }
 
-export function addScope({ alias, selector, hue }: { alias: Alias; selector: string, hue: RadixHue }) {
+export function addScope({ alias, selector, hue }: { alias: Alias; selector: string; hue: RadixHue }) {
   aliasesInUse[alias] = aliasesInUse[alias] ?? {};
   aliasesInUse[alias].scopes = aliasesInUse[alias].scopes ?? [];
   if (!aliasesInUse[alias].scopes[selector]) {
     aliasesInUse[alias].scopes[selector] = hue;
   }
 }
-

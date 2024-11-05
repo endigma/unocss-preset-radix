@@ -1,17 +1,8 @@
-import { Theme } from 'unocss/preset-uno';
-import { RADIX_HUES } from './consts';
-import * as aliasesInUseHelpers from './aliasesInUseHelpers';
+import { Theme } from "unocss/preset-uno";
+import { RADIX_HUES } from "./consts";
+import * as aliasesInUseHelpers from "./aliasesInUseHelpers";
 
-
-export function extendTheme({
-  theme,
-  prefix,
-  extend,
-}: {
-  theme: Theme;
-  prefix: string;
-  extend: boolean;
-}) {
+export function extendTheme({ theme, prefix, extend }: { theme: Theme; prefix: string; extend: boolean }) {
   const aliasesInUse = aliasesInUseHelpers.getAliasesInUse();
 
   theme.colors = {
@@ -24,7 +15,6 @@ export function extendTheme({
 
     ...Object.fromEntries(
       [...RADIX_HUES, ...Object.keys(aliasesInUse)].map((hueOrAlias) => {
-
         let colorsOfSameHueInOriginalTheme = {};
         if (theme.colors?.[hueOrAlias]) {
           if (typeof theme.colors?.[hueOrAlias] === "string") {
@@ -33,41 +23,41 @@ export function extendTheme({
             colorsOfSameHueInOriginalTheme = theme.colors?.[hueOrAlias];
           }
         }
-        
+
         return [
           hueOrAlias,
-            {
-              ...(extend ? colorsOfSameHueInOriginalTheme : {}),
+          {
+            ...(extend ? colorsOfSameHueInOriginalTheme : {}),
 
-              "fg": `var(--${prefix}-${hueOrAlias}-fg)`,
+            fg: `var(--${prefix}-${hueOrAlias}-fg)`,
 
-              "1": `var(--${prefix}-${hueOrAlias}1)`,
-              "2": `var(--${prefix}-${hueOrAlias}2)`,
-              "3": `var(--${prefix}-${hueOrAlias}3)`,
-              "4": `var(--${prefix}-${hueOrAlias}4)`,
-              "5": `var(--${prefix}-${hueOrAlias}5)`,
-              "6": `var(--${prefix}-${hueOrAlias}6)`,
-              "7": `var(--${prefix}-${hueOrAlias}7)`,
-              "8": `var(--${prefix}-${hueOrAlias}8)`,
-              "9": `var(--${prefix}-${hueOrAlias}9)`,
-              "10": `var(--${prefix}-${hueOrAlias}10)`,
-              "11": `var(--${prefix}-${hueOrAlias}11)`,
-              "12": `var(--${prefix}-${hueOrAlias}12)`,
+            "1": `var(--${prefix}-${hueOrAlias}1)`,
+            "2": `var(--${prefix}-${hueOrAlias}2)`,
+            "3": `var(--${prefix}-${hueOrAlias}3)`,
+            "4": `var(--${prefix}-${hueOrAlias}4)`,
+            "5": `var(--${prefix}-${hueOrAlias}5)`,
+            "6": `var(--${prefix}-${hueOrAlias}6)`,
+            "7": `var(--${prefix}-${hueOrAlias}7)`,
+            "8": `var(--${prefix}-${hueOrAlias}8)`,
+            "9": `var(--${prefix}-${hueOrAlias}9)`,
+            "10": `var(--${prefix}-${hueOrAlias}10)`,
+            "11": `var(--${prefix}-${hueOrAlias}11)`,
+            "12": `var(--${prefix}-${hueOrAlias}12)`,
 
-              // put colors with alpha values inside var(...) so, unocss don't add extra opacity and break it.
-              "1A": `var(--${prefix}-${hueOrAlias}1A)`,
-              "2A": `var(--${prefix}-${hueOrAlias}2A)`,
-              "3A": `var(--${prefix}-${hueOrAlias}3A)`,
-              "4A": `var(--${prefix}-${hueOrAlias}4A)`,
-              "5A": `var(--${prefix}-${hueOrAlias}5A)`,
-              "6A": `var(--${prefix}-${hueOrAlias}6A)`,
-              "7A": `var(--${prefix}-${hueOrAlias}7A)`,
-              "8A": `var(--${prefix}-${hueOrAlias}8A)`,
-              "9A": `var(--${prefix}-${hueOrAlias}9A)`,
-              "10A": `var(--${prefix}-${hueOrAlias}10A)`,
-              "11A": `var(--${prefix}-${hueOrAlias}11A)`,
-              "12A": `var(--${prefix}-${hueOrAlias}12A)`,
-            },
+            // put colors with alpha values inside var(...) so, unocss don't add extra opacity and break it.
+            "1A": `var(--${prefix}-${hueOrAlias}1A)`,
+            "2A": `var(--${prefix}-${hueOrAlias}2A)`,
+            "3A": `var(--${prefix}-${hueOrAlias}3A)`,
+            "4A": `var(--${prefix}-${hueOrAlias}4A)`,
+            "5A": `var(--${prefix}-${hueOrAlias}5A)`,
+            "6A": `var(--${prefix}-${hueOrAlias}6A)`,
+            "7A": `var(--${prefix}-${hueOrAlias}7A)`,
+            "8A": `var(--${prefix}-${hueOrAlias}8A)`,
+            "9A": `var(--${prefix}-${hueOrAlias}9A)`,
+            "10A": `var(--${prefix}-${hueOrAlias}10A)`,
+            "11A": `var(--${prefix}-${hueOrAlias}11A)`,
+            "12A": `var(--${prefix}-${hueOrAlias}12A)`,
+          },
         ];
       })
     ),
@@ -76,7 +66,7 @@ export function extendTheme({
       ...(extend && typeof theme?.colors?.["white"] !== "string" ? theme?.colors?.["white"] : {}),
       DEFAULT: "#ffffff",
 
-      fg: 'black',
+      fg: "black",
 
       "1A": `var(--${prefix}-white1A)`,
       "2A": `var(--${prefix}-white2A)`,
@@ -95,7 +85,7 @@ export function extendTheme({
       ...(extend && typeof theme?.colors?.["white"] !== "string" ? theme?.colors?.["white"] : {}),
       DEFAULT: "#000000",
 
-      fg: 'white',
+      fg: "white",
 
       "1A": `var(--${prefix}-black1A)`,
       "2A": `var(--${prefix}-black2A)`,
@@ -112,4 +102,3 @@ export function extendTheme({
     },
   } as Theme["colors"];
 }
-

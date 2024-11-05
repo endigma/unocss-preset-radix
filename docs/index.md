@@ -17,7 +17,7 @@ features:
   - title: Alphas
     details: Fully supports alpha scales. You can use them like <code>bg-blue5A</code>.
   - title: P3 colors
-    details: Use P3 colors with sRGB fallbacks. 
+    details: Use P3 colors with sRGB fallbacks.
 
   - title: Foregrounds
     details: The optimized foreground colors are available as `-fg` steps. For example text-blue-fg for white text-amber-fg for white. These colors are based on the Radix docs. This also works with hues and aliases.

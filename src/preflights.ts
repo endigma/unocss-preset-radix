@@ -1,8 +1,8 @@
-import { Alpha, Dark, P3, RadixHue, Step, StepAlpha } from './types';
-import * as radixColors from '@radix-ui/colors';
-import * as colorsInUseHelpers from './colorsInUseHelpers';
-import * as aliasesInUseHelpers from './aliasesInUseHelpers';
-import { fg } from './fg';
+import { Alpha, Dark, P3, RadixHue, Step, StepAlpha } from "./types";
+import * as radixColors from "@radix-ui/colors";
+import * as colorsInUseHelpers from "./colorsInUseHelpers";
+import * as aliasesInUseHelpers from "./aliasesInUseHelpers";
+import { fg } from "./fg";
 
 type Props = {
   darkSelector: string;
@@ -45,37 +45,36 @@ export function generateCSSVariablesForColorsInUse({
   const colorsInUse = colorsInUseHelpers.getColorsInUse();
 
   for (const _hue in colorsInUse) {
-    for (const stepAlpha in colorsInUse[_hue as RadixHue | 'black' | 'white'].stepsInUse) {
-      const { hue, step, alpha } =
-        colorsInUse[_hue as RadixHue | 'black' | 'white'].stepsInUse[stepAlpha as StepAlpha];
+    for (const stepAlpha in colorsInUse[_hue as RadixHue | "black" | "white"].stepsInUse) {
+      const { hue, step, alpha } = colorsInUse[_hue as RadixHue | "black" | "white"].stepsInUse[stepAlpha as StepAlpha];
 
-      if (['black', 'white'].includes(hue) || step === '-fg') {
+      if (["black", "white"].includes(hue) || step === "-fg") {
         cssRules.global.push(
-          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: "", p3: "" })};`
         );
         if (useP3Colors) {
           cssRules.globalP3.push(
-            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: "", p3: "P3" })};`
           );
         }
       } else {
         cssRules.lightTheme.push(
-          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: "", p3: "" })};`
         );
         cssRules.darkTheme.push(
-          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: 'Dark', p3: '' })};`
+          `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: "Dark", p3: "" })};`
         );
         if (useP3Colors) {
           cssRules.lightThemeP3.push(
-            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: '', p3: 'P3' })};`
+            `--${prefix}-${hue}${step}${alpha}: ${getColorValue({ hue, step, alpha, dark: "", p3: "P3" })};`
           );
           cssRules.darkThemeP3.push(
             `--${prefix}-${hue}${step}${alpha}: ${getColorValue({
               hue,
               step,
               alpha,
-              dark: 'Dark',
-              p3: 'P3',
+              dark: "Dark",
+              p3: "P3",
             })};`
           );
         }
@@ -109,24 +108,24 @@ export function generateCSSVariablesForColorsInUse({
   const scopeCss = Object.keys(scopeRules)
     .map((selector) => {
       return `${selector} {
-${scopeRules[selector].join('')}
+${scopeRules[selector].join("")}
 }`;
     })
-    .join('');
+    .join("");
 
   let css = `:root {${[
-    cssRules.global.join(''),
-    onlyOneTheme === 'light' ? cssRules.lightTheme.join('') : undefined,
-    onlyOneTheme === 'dark' ? cssRules.darkTheme.join('') : undefined,
-  ].join('')}}`;
+    cssRules.global.join(""),
+    onlyOneTheme === "light" ? cssRules.lightTheme.join("") : undefined,
+    onlyOneTheme === "dark" ? cssRules.darkTheme.join("") : undefined,
+  ].join("")}}`;
 
   if (useP3Colors) {
     css = `${css}
 @supports(color: color(display-p3 0 0 1)){:root{${[
-        cssRules.globalP3.join(''),
-        onlyOneTheme === 'light' ? cssRules.lightThemeP3.join('') : undefined,
-        onlyOneTheme === 'dark' ? cssRules.darkThemeP3.join('') : undefined,
-      ].join('')}}}`;
+      cssRules.globalP3.join(""),
+      onlyOneTheme === "light" ? cssRules.lightThemeP3.join("") : undefined,
+      onlyOneTheme === "dark" ? cssRules.darkThemeP3.join("") : undefined,
+    ].join("")}}}`;
   }
 
   css = `${css}
@@ -135,42 +134,42 @@ ${scopeCss}`;
   //  if both light and dark theme exist
   if (!onlyOneTheme) {
     css = `${css}
-${lightSelector} {${cssRules.lightTheme.join('')}}
-${darkSelector} {${cssRules.darkTheme.join('')}}`;
+${lightSelector} {${cssRules.lightTheme.join("")}}
+${darkSelector} {${cssRules.darkTheme.join("")}}`;
 
     if (useP3Colors) {
       css = `${css}
 @supports(color: color(display-p3 0 0 1)){${lightSelector} {${cssRules.lightThemeP3.join(
-        ''
-      )}} ${darkSelector} {${cssRules.darkThemeP3.join('')}}}`;
+        ""
+      )}} ${darkSelector} {${cssRules.darkThemeP3.join("")}}}`;
     }
   }
 
-  return css.replaceAll('\n\n', '\n').replaceAll('\n \n', '');
+  return css.replaceAll("\n\n", "\n").replaceAll("\n \n", "");
 }
 
 function getColorValue({
   hue,
-  dark = '',
+  dark = "",
   step,
-  alpha = '',
-  p3 = '',
+  alpha = "",
+  p3 = "",
 }: {
   alpha?: Alpha;
-  hue: RadixHue | 'black' | 'white';
+  hue: RadixHue | "black" | "white";
   dark?: Dark;
   step: Step;
   p3?: P3;
 }) {
-  if (step === '-fg') return fg(hue);
+  if (step === "-fg") return fg(hue);
 
-  let value = '';
+  let value = "";
   //@ts-ignore
   value = radixColors[`${hue}${dark}${p3}${alpha}`][`${hue}${alpha}${step}`];
 
-  if (p3 === 'P3') {
-    if (alpha === 'A') return value;
-    if (alpha === '') {
+  if (p3 === "P3") {
+    if (alpha === "A") return value;
+    if (alpha === "") {
       // return in p3 format ex: '1 4 5'
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
       // return value.replace('color(display-p3', '').replace(')', '').trim();
@@ -178,15 +177,15 @@ function getColorValue({
     }
   }
 
-  if (p3 === '') {
+  if (p3 === "") {
     // convert Hex or rgb values to rgb values
     // const color = new Color(value);
 
-    if (alpha === 'A') {
+    if (alpha === "A") {
       // value = color.toString({ format: 'rgb', precision: 4 });
       return value; // put it inside var() so unocss can not add opacity to it.
     }
-    if (alpha === '') {
+    if (alpha === "") {
       // convert 'rgb(100 40 50)' to '100 40 50' to be used in rgb(  / <alpha-value>)
       // so we can use tailwind opacity (bg-opacity-30 or bg-blue9/30) with it
       // value = color.toString({ format: 'rgba', precision: 4 });

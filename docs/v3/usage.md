@@ -26,16 +26,16 @@ $ yarn add -D unocss-preset-radix
 
 ```ts
 // uno.config.ts (or vite.config.ts)
-import { defineConfig, presetUno } from 'unocss';
-import { presetRadix } from 'unocss-preset-radix';
+import { defineConfig, presetUno } from "unocss";
+import { presetRadix } from "unocss-preset-radix";
 
 export default defineConfig({
   presets: [
     presetUno(),
     presetRadix({
       aliases: {
-        primary: 'green',
-        base: 'slate',
+        primary: "green",
+        base: "slate",
       },
     }),
   ],
@@ -78,7 +78,7 @@ You can use css variables like `var(--un-preset-radix-red9)`, `var(--un-preset-r
 
 See [Usage in CSS variables](/v3/usage-in-css-variables) for more information.
 
-## Alias Utility 
+## Alias Utility
 
 You can reset an alias to a different hue by using the utility `alias-{aliasName}-{hue}` like `alias-accent-violet`.
 
@@ -88,42 +88,42 @@ See [Alias Utility](/v3/alias-utility) for more information.
 
 ```ts
 // uno.config.ts (or vite.config.ts)
-import { defineConfig, presetUno } from 'unocss';
-import { presetRadix } from 'unocss-preset-radix';
+import { defineConfig, presetUno } from "unocss";
+import { presetRadix } from "unocss-preset-radix";
 
 export default defineConfig({
   presets: [
     presetUno(),
     presetRadix({
       aliases: {
-        primary: 'green',
-        base: 'slate',
+        primary: "green",
+        base: "slate",
       },
       safelist: [
-        'amber', /* this adds amber1, amber2, ..., amber12 and 
+        "amber" /* this adds amber1, amber2, ..., amber12 and 
         amber1A, amber2A, ..., amber12A 
         whether they are used in your project or not. 
         This is useful when you add classes on runtime
-        (ex from user input or over network). */
-        'blue4', // only adds blue4 whether it is used in your project or not.
-        'green3A', // only adds green4A.
-        'white7A', // only adds white7A.
-        'primary', /* adds primary1, primary2, ..., primary12
+        (ex from user input or over network). */,
+        "blue4", // only adds blue4 whether it is used in your project or not.
+        "green3A", // only adds green4A.
+        "white7A", // only adds white7A.
+        "primary" /* adds primary1, primary2, ..., primary12
           and primary1A, primary2A, ..., primary12A 
-          whether they are used in your project or not. */
+          whether they are used in your project or not. */,
       ],
-      prefix: 'my-prefix', /* CSS variables will 
-      be generated with this prefix  */
-      darkSelector: '.dark-theme',  /* CSS variables for dark colors 
-      will be applied to this selector */
-      lightSelector: ':root .light-theme', /* CSS variables for light colors 
-      will be applied to this selector */
+      prefix: "my-prefix" /* CSS variables will 
+      be generated with this prefix  */,
+      darkSelector: ".dark-theme" /* CSS variables for dark colors 
+      will be applied to this selector */,
+      lightSelector: ":root .light-theme" /* CSS variables for light colors 
+      will be applied to this selector */,
       useP3Colors: true, // use P3 colors with sRGB fallbacks
       extend: true, // extends the defaults theme instead of overriding it
-      onlyOneTheme: 'dark', /* if your project has only dark theme, 
+      onlyOneTheme: "dark" /* if your project has only dark theme, 
       set it here so CSS variables for other theme is not added to CSS.
       If this option is present, darkSelector and lightSelector will be ignored 
-      and all CSS variables will be added to the :root selector. */
+      and all CSS variables will be added to the :root selector. */,
     }),
   ],
 });

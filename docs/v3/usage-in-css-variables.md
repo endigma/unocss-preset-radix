@@ -1,14 +1,11 @@
-
 # Usage in CSS Variables
 
-You can use css variables like `var(--un-preset-radix-red9)`, `var( --un-preset-radix-red9, red)` in your project and it adds the corresponding colors. 
+You can use css variables like `var(--un-preset-radix-red9)`, `var( --un-preset-radix-red9, red)` in your project and it adds the corresponding colors.
 
-For example: 
+For example:
 
 ```html
-<div class='p-4'
-  style="border-color: var(--un-preset-radix-blue5A); color: var(--un-preset-radix-gray12, 'darkgray')"
-  >
+<div class="p-4" style="border-color: var(--un-preset-radix-blue5A); color: var(--un-preset-radix-gray12, 'darkgray')">
   Text on gray background
 </div>
 ```
@@ -40,4 +37,3 @@ The preset removes the space after `var(`, the trailing space, the trailing comm
 If you use this in CSS files, make sure UnoCSS watches these CSS files.
 
 If you change `prefix` option, you will need to change the CSS variables as well. For example, if you set prefix to `my-prefix`, you will need to change the CSS variables to `var(--my-prefix-red9)`, `var(--my-prefix-red9 , red)`.
-

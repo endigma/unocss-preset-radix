@@ -1,35 +1,35 @@
-import { RADIX_HUES } from './consts';
-export type Alpha = 'A' | '';
+import { RADIX_HUES } from "./consts";
+export type Alpha = "A" | "";
 export type RadixHue = (typeof RADIX_HUES)[number];
-export type Step = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '-fg';
+export type Step = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "-fg";
 export type StepAlpha =
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | '10'
-  | '11'
-  | '12'
-  | '1A'
-  | '2A'
-  | '3A'
-  | '4A'
-  | '5A'
-  | '6A'
-  | '7A'
-  | '8A'
-  | '9A'
-  | '10A'
-  | '11A'
-  | '12A'
-  | '-fg';
-export type P3 = 'P3' | '';
-export type Dark = 'Dark' | '';
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "11"
+  | "12"
+  | "1A"
+  | "2A"
+  | "3A"
+  | "4A"
+  | "5A"
+  | "6A"
+  | "7A"
+  | "8A"
+  | "9A"
+  | "10A"
+  | "11A"
+  | "12A"
+  | "-fg";
+export type P3 = "P3" | "";
+export type Dark = "Dark" | "";
 export type Token = string;
 export type Property = string;
 export type Alias = string;
@@ -38,8 +38,8 @@ export type Aliases = Record<Alias, RadixHue>;
 export type SafelistColor =
   | RadixHue
   | `${RadixHue}${StepAlpha}`
-  | 'black'
-  | 'white'
+  | "black"
+  | "white"
   | `black${Step}A`
   | `white${Step}A`
   | `white-fg`
@@ -66,11 +66,11 @@ export interface Options<T extends Aliases> {
   lightSelector?: string;
   /** Add color aliases */
   aliases?: T;
- /**
-   * List of Colors or Aliases you want to preserve. You can specific color step (like `blue4` or `blue5A`) or add a color (like blue) to preserve all 12 steps, 12 alpha steps and `fg` step. 
+  /**
+   * List of Colors or Aliases you want to preserve. You can specific color step (like `blue4` or `blue5A`) or add a color (like blue) to preserve all 12 steps, 12 alpha steps and `fg` step.
    * Same for aliases. You can preserve specific step of an alias like `success4`, `success5A`, `success-fg` or add `success` to preserve all 12 steps, all 12 alpha steps and fg preserved). Note any safelist alias must be defined in aliases option, otherwise it will be ignored.
    */
-  safelist?: Readonly <SafelistColor | SafeListAlias<T>>[];
+  safelist?: Readonly<SafelistColor | SafeListAlias<T>>[];
 
   /**
    * Extend instead of override the default theme
@@ -86,7 +86,7 @@ export interface Options<T extends Aliases> {
    * If your project has only one theme, set it here so CSS variables for other theme is not added to CSS.
    * @default undefined
    */
-  onlyOneTheme?: 'dark' | 'light';
+  onlyOneTheme?: "dark" | "light";
   /**
    * name of unocss layer to add generated css variables to
    * @default undefined
@@ -94,4 +94,4 @@ export interface Options<T extends Aliases> {
   layer?: string;
 }
 
-export type HueOrAlias = RadixHue | 'black' | 'white' | string;
+export type HueOrAlias = RadixHue | "black" | "white" | string;
