@@ -125,6 +125,8 @@ export const radixScales = [
   "irisA",
   "irisDark",
   "irisDarkA",
+  "blackA",
+  "whiteA",
 ] as const;
 
 export type RadixScales = (typeof radixScales)[number];
@@ -161,11 +163,13 @@ export const radixColors = [
   "jade",
   "iris",
   "ruby",
+  "black",
+  "white"
 ] as const;
 
 export type RadixColors = (typeof radixColors)[number];
 
-export const radixSteps = [
+export const radixSolidSteps = [
   1,
   2,
   3,
@@ -178,6 +182,9 @@ export const radixSteps = [
   10,
   11,
   12,
+] as const;
+
+export const radixAlphaSteps = [
   "1A",
   "2A",
   "3A",
@@ -192,4 +199,11 @@ export const radixSteps = [
   "12A",
 ] as const;
 
+export const radixSteps = [
+  ...radixSolidSteps,
+  ...radixAlphaSteps
+] as const;
+
 export type RadixSteps = (typeof radixSteps)[number];
+export type RadixAlphaSteps = (typeof radixAlphaSteps)[number];
+export type RadixSolidSteps = (typeof radixSolidSteps)[number];
