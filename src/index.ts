@@ -103,6 +103,9 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
         ...aliases,
         ...hues,
 
+        black: "black",
+        white: "white",
+
         transparent: "transparent",
         current: "currentColor",
         inherit: "inherit",
