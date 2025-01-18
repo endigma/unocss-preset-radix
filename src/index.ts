@@ -60,7 +60,7 @@ function dataVariant(
   attribute: string,
   selector: string
 ): Variant {
-  return variantMatcher(`radix-${attribute}`, (input) => ({
+  return variantMatcher(`${prefix}${Boolean(prefix) ? '-' : ''}${attribute}`, (input) => ({
     selector: `${input.selector}${selector}`,
   }));
 }
