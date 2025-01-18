@@ -1,6 +1,7 @@
 import { genCSS, generateColors, generateHues, newPalette } from "./utils";
+import { variantMatcher } from "@unocss/rule-utils";
 import type { RadixColors } from "./radix";
-import type { Preset } from "unocss";
+import { definePreset, Variant } from "@unocss/core";
 import type { Theme } from "unocss/preset-uno";
 
 export * from "./radix";
@@ -14,6 +15,12 @@ export interface PresetRadixOptions {
    * @default --un-preset-radix
    */
   prefix?: string;
+
+  /**
+   * Customize the prefix of the generated variants
+   * @default "radix"
+   */
+  variantPrefix?: string;
 
   /**
    * Customize the selector used to apply the dark versions of the color palette
@@ -48,15 +55,22 @@ export function generateAliases(
   }, {} as Record<string, Record<number, string>>);
 }
 
-function minify(css: string) {
-  return css.replace(/\n/g, "").replace(/\s+/g, "").trim();
+function dataVariant(
+  prefix: string,
+  attribute: string,
+  selector: string
+): Variant {
+  return variantMatcher(`radix-${attribute}`, (input) => ({
+    selector: `${input.selector}${selector}`,
+  }));
 }
 
-export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
+export const presetRadix = definePreset((options: PresetRadixOptions) => {
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
     lightSelector = ":root, .light-theme",
+    variantPrefix = "radix",
     palette: selectedColors,
     aliases: selectedAliases = {},
     extend = false,
@@ -97,6 +111,18 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
         },
       ],
     ],
+    variants: [
+      dataVariant(variantPrefix, "open", "[data-state='open']"),
+      dataVariant(variantPrefix, "closed", "[data-state='closed']"),
+      dataVariant(
+        variantPrefix,
+        "horizontal",
+        "[data-orientation='horizontal']"
+      ),
+      dataVariant(variantPrefix, "vertical", "[data-orientation='vertical']"),
+      dataVariant(variantPrefix, "disabled", "[data-disabled]"),
+      dataVariant(variantPrefix, "enabled", ":not([data-disabled])"),
+    ],
     extendTheme(theme: Theme) {
       theme.colors = {
         ...colors,
@@ -116,4 +142,4 @@ export function presetRadix(options: PresetRadixOptions): Preset<Theme> {
       },
     ],
   };
-}
+});
