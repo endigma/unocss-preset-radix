@@ -12,13 +12,13 @@ export interface PresetRadixOptions {
   palette: readonly RadixColors[];
   /**
    * The prefix of the generated css variables
-   * @default --un-preset-radix
+   * @default "--un-preset-radix-"
    */
   prefix?: string;
 
   /**
    * Customize the prefix of the generated variants
-   * @default "radix"
+   * @default "radix-"
    */
   variantPrefix?: string;
 
@@ -60,7 +60,7 @@ function dataVariant(
   attribute: string,
   selector: string
 ): Variant {
-  return variantMatcher(`${prefix}${Boolean(prefix) ? '-' : ''}${attribute}`, (input) => ({
+  return variantMatcher(`${prefix}${attribute}`, (input) => ({
     selector: `${input.selector}${selector}`,
   }));
 }
@@ -70,7 +70,7 @@ export const presetRadix = definePreset((options: PresetRadixOptions) => {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
     lightSelector = ":root, .light-theme",
-    variantPrefix = "radix",
+    variantPrefix = "radix-",
     palette: selectedColors,
     aliases: selectedAliases = {},
     extend = false,
