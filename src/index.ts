@@ -65,7 +65,7 @@ function dataVariant(
   }));
 }
 
-export const presetRadix = definePreset((options: PresetRadixOptions) => {
+export const presetRadix = definePreset((options?: PresetRadixOptions) => {
   const {
     prefix = "--un-preset-radix-",
     darkSelector = ".dark-theme",
